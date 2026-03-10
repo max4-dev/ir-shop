@@ -1,0 +1,42 @@
+{
+  "name": "ir-shop-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "steiger": "steiger ./src"
+  },
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@feature-sliced/steiger-plugin": "^0.5.7",
+    "@svgr/webpack": "^8.1.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9.39.4",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-next": "^16.1.6",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "postcss-pxtorem": "^6.1.0",
+    "prettier": "^3.8.1",
+    "steiger": "^0.5.11",
+    "stylelint": "^17.4.0",
+    "stylelint-order": "^8.0.0",
+    "typescript": "^5"
+  }
+}
