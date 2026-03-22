@@ -7,8 +7,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+model Product {
+  id             Int      @id @default(autoincrement())
+  name           String
+  image          String
+  images         String[]
+  price          Int
+  salePercent    Int
+  priceWithSale  Int
+  isAvailable    Boolean
+  availableCount Int
+  description    String?
+}
+
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id           Int    @id @default(autoincrement())
+  phone        String @unique
+  name         String
+  password     String
+  role         Role   @default(USER)
+  tokenVersion Int    @default(0)
 }
