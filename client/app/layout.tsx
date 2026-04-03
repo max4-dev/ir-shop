@@ -1,14 +1,19 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Manrope, Montserrat } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+import { AppProvider } from "@/src/app/providers";
+
+import type { Metadata } from "next";
+
+import "@src/app/styles/style.css";
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["cyrillic", "latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["cyrillic", "latin"],
 });
 
 export const metadata: Metadata = {
@@ -23,8 +28,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+      <body className={`${manrope.variable} ${montserrat.variable}`}>
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );

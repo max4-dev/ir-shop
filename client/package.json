@@ -6,14 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint .",
     "steiger": "steiger ./src"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@tanstack/react-query": "^5.95.2",
     "classnames": "^2.5.1",
+    "ky": "^1.14.3",
     "next": "16.1.6",
+    "radix-ui": "^1.4.3",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-hook-form": "^7.72.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@feature-sliced/steiger-plugin": "^0.5.7",
@@ -25,13 +31,12 @@
     "@typescript-eslint/parser": "^8.57.0",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9.39.4",
-    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-next": "^16.1.6",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-preset-env": "^11.2.0",
     "postcss-pxtorem": "^6.1.0",
     "prettier": "^3.8.1",
     "steiger": "^0.5.11",

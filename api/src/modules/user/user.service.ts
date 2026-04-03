@@ -6,17 +6,21 @@ import {
 } from '@nestjs/common';
 import { hash, verify } from 'argon2';
 import { PrismaService } from 'src/common/database/prisma.service';
+import { TokenService } from 'src/common/redis/token.service';
 import { UserPasswordDto, UserProfileDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private tokenService: TokenService,
+  ) {}
 
   async getAll() {
     const users = await this.prisma.user.findMany({
       select: {
         id: true,
-        phone: true,
+        email: true,
         name: true,
         role: true,
       },
@@ -30,7 +34,7 @@ export class UserService {
       where: { id },
       select: {
         id: true,
-        phone: true,
+        email: true,
         name: true,
         role: true,
       },
@@ -45,11 +49,11 @@ export class UserService {
 
   async updateProfile(id: number, dto: UserProfileDto) {
     const existUser = await this.prisma.user.findUnique({
-      where: { phone: dto.phone },
+      where: { email: dto.email },
     });
 
     if (existUser && id !== existUser.id) {
-      throw new BadRequestException('Этот номер телефона уже используется');
+      throw new BadRequestException('Этот email уже используется');
     }
 
     try {
@@ -57,21 +61,18 @@ export class UserService {
         where: { id },
         data: {
           name: dto.name,
-          phone: dto.phone,
+          email: dto.email,
         },
         select: {
           id: true,
-          phone: true,
+          email: true,
           name: true,
           role: true,
         },
       });
 
       return updatedUser;
-    } catch (error) {
-      if (error.code === 'P2025') {
-        throw new NotFoundException('Пользователь не найден');
-      }
+    } catch {
       throw new InternalServerErrorException('Ошибка при обновлении профиля');
     }
   }
@@ -92,7 +93,6 @@ export class UserService {
     }
 
     try {
-      // Увеличиваем tokenVersion для инвалидации всех старых токенов
       await this.prisma.user.update({
         where: { id },
         data: {
@@ -100,6 +100,8 @@ export class UserService {
           tokenVersion: { increment: 1 },
         },
       });
+
+      await this.tokenService.removeAllUserTokens(id);
 
       return { message: 'Пароль успешно обновлён' };
     } catch {

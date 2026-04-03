@@ -1,0 +1,39 @@
+.link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 80px;
+  color: var(--white);
+  font-size: 16px;
+  border-radius: 62px;
+  gap: 12px;
+  background-color: var(--black);
+  border: 1px solid var(--black);
+}
+
+.small {
+  padding: 13px 28px;
+}
+
+.big {
+  width: 100%;
+  max-width: 457px;
+  padding: 19px 80px;
+}
+
+.text {
+  display: inline-block;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  color: var(--black);
+  font-weight: 400;
+  font-size: 16px;
+  text-decoration: underline;
+}
+
+.ghost {
+  border: 1px solid var(--border-gray);
+  color: var(--black);
+  background-color: var(--white);
+}

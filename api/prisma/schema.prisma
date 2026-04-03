@@ -27,7 +27,7 @@ model Product {
 
 model User {
   id           Int    @id @default(autoincrement())
-  phone        String @unique
+  email        String @unique
   name         String
   password     String
   role         Role   @default(USER)
