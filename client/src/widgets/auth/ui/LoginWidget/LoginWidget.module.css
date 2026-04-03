@@ -1,0 +1,12 @@
+.subtitle {
+  text-align: center;
+  color: var(--dark-gray);
+  margin-bottom: 44px;
+}
+
+.register,
+.agreement {
+  text-align: center;
+  color: var(--dark-gray);
+  margin-top: 32px;
+}

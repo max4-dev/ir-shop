@@ -1,0 +1,28 @@
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 80px;
+  color: var(--white);
+  font-size: 16px;
+  border-radius: 62px;
+  gap: 12px;
+  background-color: var(--black);
+  border: 1px solid var(--black);
+}
+
+.small {
+  padding: 13px 28px;
+}
+
+.big {
+  width: 100%;
+  max-width: 457px;
+  padding: 19px 80px;
+}
+
+.ghost {
+  border: 1px solid var(--border-gray);
+  color: var(--black);
+  background-color: var(--white);
+}

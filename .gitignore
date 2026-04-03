@@ -23,6 +23,7 @@ client/out/
 dist
 api/dist
 pgdata
+api/redis-data
 generated/prisma
 
 # production builds

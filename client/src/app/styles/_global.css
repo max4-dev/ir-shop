@@ -1,0 +1,27 @@
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  color: var(--black);
+  font-size: 16px;
+  overflow-x: hidden;
+  background-color: var(--white);
+  font-weight: 400;
+  font-family: var(--font-manrope);
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0 10px;
+  max-width: 1260px;
+}
+
+.main {
+  flex: 1;
+  margin: 65px 0;
+}
