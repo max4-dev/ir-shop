@@ -5,7 +5,8 @@ import cn from "classnames";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { Button, Input } from "@/src/shared/ui";
+import { getErrorMessage, useToast } from "@/src/shared/lib";
+import { Button, Input, Toast } from "@/src/shared/ui";
 
 import { authQuery } from "../../api";
 import { RegisterDTO, registerSchema } from "../../model";
@@ -22,10 +23,17 @@ export const RegisterForm = ({ className }: RegisterFormProps) => {
   } = useForm<RegisterDTO>({
     resolver: zodResolver(registerSchema),
   });
+  const { showToast, toastProps } = useToast();
 
   const onSubmitHandler: SubmitHandler<RegisterDTO> = async (data) => {
-    await authQuery.register(data);
-    router.push("/");
+    try {
+      await authQuery.register(data);
+      router.push("/");
+    } catch (error) {
+      showToast(getErrorMessage(error), {
+        appearance: "danger",
+      });
+    }
   };
 
   return (
@@ -57,6 +65,8 @@ export const RegisterForm = ({ className }: RegisterFormProps) => {
       <Button type="submit" disabled={isSubmitting}>
         Регистрация
       </Button>
+
+      <Toast {...toastProps} />
     </form>
   );
 };

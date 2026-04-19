@@ -5,7 +5,8 @@ import cn from "classnames";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { Button, Input } from "@/src/shared/ui";
+import { getErrorMessage, useToast } from "@/src/shared/lib";
+import { Button, Input, Toast } from "@/src/shared/ui";
 
 import { authQuery } from "../../api";
 import { LoginDTO, loginSchema } from "../../model";
@@ -22,10 +23,15 @@ export const LoginForm = ({ className }: LoginFormProps) => {
   } = useForm<LoginDTO>({
     resolver: zodResolver(loginSchema),
   });
+  const { showToast, toastProps } = useToast();
 
   const onSubmitHandler: SubmitHandler<LoginDTO> = async (data) => {
-    await authQuery.login(data);
-    router.push("/");
+    try {
+      await authQuery.login(data);
+      router.push("/");
+    } catch (error) {
+      showToast(getErrorMessage(error), { appearance: "danger" });
+    }
   };
 
   return (
@@ -49,6 +55,8 @@ export const LoginForm = ({ className }: LoginFormProps) => {
       <Button type="submit" disabled={isSubmitting}>
         Вход
       </Button>
+
+      <Toast {...toastProps} />
     </form>
   );
 };

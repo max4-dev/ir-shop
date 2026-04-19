@@ -1,50 +1,96 @@
-import ky from "ky";
+import * as Sentry from "@sentry/nextjs";
+import ky, { Options } from "ky";
 
-import { getIsRefreshSent, handleRefreshToken } from "./authHelper";
+import { CONFIG } from "../config";
+
 import { HttpCodes } from "./const/httpCodes";
 
-export const client = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+type RefreshSubscriber = (error?: Error) => void;
+
+let isRefreshing = false;
+let refreshSubscribers: RefreshSubscriber[] = [];
+
+const subscribeTokenRefresh = (cb: RefreshSubscriber) => {
+  refreshSubscribers.push(cb);
+};
+
+const onTokenRefreshed = () => {
+  isRefreshing = false;
+  const subscribers = refreshSubscribers;
+  refreshSubscribers = [];
+  subscribers.forEach((cb) => cb());
+};
+
+const onRefreshFailed = (error: Error) => {
+  isRefreshing = false;
+  const subscribers = refreshSubscribers;
+  refreshSubscribers = [];
+  subscribers.forEach((cb) => cb(error));
+};
+
+const baseConfig: Options = {
+  prefixUrl: CONFIG.API_URL,
   credentials: "include",
-  headers: {
-    "Content-Type": "application/json",
-  },
+  headers: { "Content-Type": "application/json" },
+};
+
+export const baseKy = ky.create(baseConfig);
+
+export const client = ky.create({
+  ...baseConfig,
   hooks: {
     afterResponse: [
-      async (request, options, response) => {
-        if (response.status === HttpCodes.Unauthorized) {
-          const isSentToRefresh = await getIsRefreshSent();
-          if (isSentToRefresh) {
-            throw new Error("Already tried to refresh token");
-          }
+      async (request, _options, response) => {
+        if (response.status !== HttpCodes.UNAUTHORIZED) {
+          return response;
+        }
 
-          try {
-            await handleRefreshToken();
+        if (new URL(request.url).pathname.endsWith("/auth/refresh-token")) {
+          return response;
+        }
 
-            const retryRequest = new Request(request, {
-              headers: new Headers(request.headers),
+        if (isRefreshing) {
+          return new Promise<Response>((resolve, reject) => {
+            subscribeTokenRefresh(async (error?: Error) => {
+              if (error) return reject(error);
+              try {
+                resolve(await baseKy(request.clone()));
+              } catch (err) {
+                reject(err);
+              }
             });
-            return ky(retryRequest, options);
-          } catch (err) {
-            throw err;
-          }
+          });
         }
 
-        if (response.status === HttpCodes.Forbidden) {
-          throw new Error("Forbidden");
+        isRefreshing = true;
+
+        try {
+          await baseKy.post("auth/refresh-token");
+
+          onTokenRefreshed();
+
+          return baseKy(request.clone());
+        } catch {
+          const error = new Error("Сессия истекла");
+          onRefreshFailed(error);
+          throw error;
+        }
+      },
+    ],
+
+    beforeError: [
+      async (error) => {
+        const { response } = error;
+        let message = response.statusText;
+
+        try {
+          const body = (await response.clone().json()) as { message?: string };
+          if (body.message) message = body.message;
+        } catch (err) {
+          Sentry.captureException(err, { extra: { status: response.status, url: response.url } });
         }
 
-        if (!response.ok) {
-          try {
-            const data = await response.json();
-            console.log(data);
-          } catch {
-            console.log({ message: "Unknown error", type: "error" });
-          }
-          throw new Error(response.statusText);
-        }
-
-        return response;
+        return Object.assign(error, { message });
       },
     ],
   },

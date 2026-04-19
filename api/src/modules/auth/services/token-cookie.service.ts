@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { TIME } from 'src/common/constants';
+import { TIME } from 'src/common/const';
 
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
-  user: Pick<User, 'id' | 'email' | 'name' | 'role'>;
+  userId: number;
 }
 
 @Injectable()
@@ -20,7 +19,7 @@ export class TokenCookieService {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax' as const,
-      maxAge: TIME.IN_MS.ONE_DAY * 30,
+      maxAge: TIME.IN_MS.ONE_MINUTE * 5,
       path: this.COOKIE_PATH,
     };
   }
@@ -30,7 +29,7 @@ export class TokenCookieService {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax' as const,
-      maxAge: TIME.IN_MS.ONE_HOUR * 7,
+      maxAge: TIME.IN_MS.ONE_MINUTE * 1,
       path: this.COOKIE_PATH,
     };
   }
