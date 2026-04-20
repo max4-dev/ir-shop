@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @Throttle({ default: { limit: 50, ttl: 60 } })
-  @Post('login/access-token')
+  @Post('refresh-token')
   async getNewTokens(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,

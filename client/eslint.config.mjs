@@ -33,6 +33,7 @@ export default defineConfig([
           },
         },
       ],
+      "import/no-cycle": ["error"],
     },
 
     settings: {

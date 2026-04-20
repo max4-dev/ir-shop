@@ -1,3 +1,5 @@
+"use client";
+
 import cn from "classnames";
 import { Label, unstable_PasswordToggleField as PasswordToggleField } from "radix-ui";
 import { useId } from "react";
@@ -16,7 +18,11 @@ export const Input = ({ className, label, errorMessage, ...props }: InputProps) 
           {label}
         </Label.Root>
       )}
-      <input className={cn(styles.input, { [styles.errorInput]: errorMessage })} id={id} {...props} />
+      <input
+        className={cn(styles.input, { [styles.errorInput]: errorMessage })}
+        id={id}
+        {...props}
+      />
       {errorMessage && <span className={styles.error}>{errorMessage}</span>}
     </div>
   );

@@ -58,7 +58,7 @@ export class AuthService {
     this.cookieService.setAuthCookies(res, {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
-      user: this.returnUserFields(user),
+      userId: user.id,
     });
 
     return {
@@ -85,12 +85,11 @@ export class AuthService {
     this.cookieService.setAuthCookies(res, {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
-      user: this.returnUserFields(user),
+      userId: user.id,
     });
 
     return {
       accessToken: tokens.accessToken,
-      user: this.returnUserFields(user),
     };
   }
 
@@ -154,12 +153,11 @@ export class AuthService {
     this.cookieService.setAuthCookies(res, {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
-      user: this.returnUserFields(user),
+      userId: user.id,
     });
 
     return {
       accessToken: tokens.accessToken,
-      user: this.returnUserFields(user),
     };
   }
 

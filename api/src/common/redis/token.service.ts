@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { hash, verify } from 'argon2';
 import { RedisService } from 'src/common/redis/redis.service';
-import { TIME } from '../constants';
+import { TIME } from '../const';
 
 export interface TokenData {
   userId: number;
