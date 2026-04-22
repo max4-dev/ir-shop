@@ -1,0 +1,18 @@
+.bottomInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 30px;
+  border-bottom: 1px solid var(--border-gray);
+  gap: 40px;
+}
+
+.search {
+  margin-left: auto;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}

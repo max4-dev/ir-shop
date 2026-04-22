@@ -1,8 +1,9 @@
 import { unstable_PasswordToggleField as PasswordToggleField } from "radix-ui";
-import { DetailedHTMLProps, InputHTMLAttributes } from "react";
+import { DetailedHTMLProps, InputHTMLAttributes, ReactNode } from "react";
 
 interface BaseInputProps {
   label?: string;
+  icon?: ReactNode;
   errorMessage?: string;
 }
 

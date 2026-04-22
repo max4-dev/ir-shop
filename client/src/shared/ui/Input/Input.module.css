@@ -1,4 +1,4 @@
-.passwordBox {
+.passwordBox, .inputBox {
   position: relative;
 }
 
@@ -53,4 +53,16 @@
   font-size: 14px;
   margin-top: 5px;
   font-weight: 500;
+}
+
+.withIcon {
+  padding-left: 52px;
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  color: var(--gray);
+  transform: translateY(-40%);
 }

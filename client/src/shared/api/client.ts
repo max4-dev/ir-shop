@@ -2,8 +2,9 @@ import * as Sentry from "@sentry/nextjs";
 import ky, { Options } from "ky";
 
 import { CONFIG } from "../config";
+import { SessionEvent, sessionEventBus } from "../lib";
 
-import { HttpCodes } from "./const/httpCodes";
+import { HttpCodes } from "./constants/http-codes.constants";
 
 type RefreshSubscriber = (error?: Error) => void;
 
@@ -26,6 +27,8 @@ const onRefreshFailed = (error: Error) => {
   const subscribers = refreshSubscribers;
   refreshSubscribers = [];
   subscribers.forEach((cb) => cb(error));
+
+  sessionEventBus.emit(SessionEvent.SessionExpired);
 };
 
 const baseConfig: Options = {

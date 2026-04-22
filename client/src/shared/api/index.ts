@@ -1,3 +1,3 @@
 export { client } from "./client";
-export { HttpCodes } from "./const/httpCodes";
-export { Tokens, type ITokens } from "./types/tokens";
+export { HttpCodes } from "./constants/http-codes.constants";
+export { Tokens, type ITokens } from "./types/tokens.types";

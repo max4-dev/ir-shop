@@ -15,12 +15,14 @@
     "@tanstack/react-query": "^5.95.2",
     "classnames": "^2.5.1",
     "ky": "^1.14.3",
+    "mitt": "^3.0.1",
     "next": "16.1.6",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.72.0",
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@feature-sliced/steiger-plugin": "^0.5.7",

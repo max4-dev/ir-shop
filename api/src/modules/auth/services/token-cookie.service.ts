@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { TIME } from 'src/common/const';
+import { TIME } from 'src/common/constants';
 
 export interface AuthTokens {
   accessToken: string;
