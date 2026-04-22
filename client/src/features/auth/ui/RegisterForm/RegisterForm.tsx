@@ -8,8 +8,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { getErrorMessage, useToast } from "@/src/shared/lib";
 import { Button, Input, Toast } from "@/src/shared/ui";
 
-import { authQuery } from "../../api";
-import { RegisterDTO, registerSchema } from "../../model";
+import { RegisterDTO } from "../../api";
+import { authSelectors, RegisterFormData, registerSchema, useAuthStore } from "../../model";
 
 import styles from "./RegisterForm.module.css";
 import { RegisterFormProps } from "./RegisterForm.props";
@@ -20,14 +20,15 @@ export const RegisterForm = ({ className }: RegisterFormProps) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterDTO>({
+  } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
   const { showToast, toastProps } = useToast();
+  const handleRegister = useAuthStore(authSelectors.register);
 
   const onSubmitHandler: SubmitHandler<RegisterDTO> = async (data) => {
     try {
-      await authQuery.register(data);
+      await handleRegister(data);
       router.push("/");
     } catch (error) {
       showToast(getErrorMessage(error), {

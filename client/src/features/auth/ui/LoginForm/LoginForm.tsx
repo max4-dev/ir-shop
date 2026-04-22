@@ -8,8 +8,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { getErrorMessage, useToast } from "@/src/shared/lib";
 import { Button, Input, Toast } from "@/src/shared/ui";
 
-import { authQuery } from "../../api";
-import { LoginDTO, loginSchema } from "../../model";
+import { LoginDTO } from "../../api";
+import { authSelectors, LoginFormData, loginSchema, useAuthStore } from "../../model";
 
 import styles from "./LoginForm.module.css";
 import { LoginFormProps } from "./LoginForm.props";
@@ -20,14 +20,15 @@ export const LoginForm = ({ className }: LoginFormProps) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginDTO>({
+  } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
   const { showToast, toastProps } = useToast();
+  const login = useAuthStore(authSelectors.login);
 
   const onSubmitHandler: SubmitHandler<LoginDTO> = async (data) => {
     try {
-      await authQuery.login(data);
+      await login(data);
       router.push("/");
     } catch (error) {
       showToast(getErrorMessage(error), { appearance: "danger" });

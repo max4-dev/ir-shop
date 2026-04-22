@@ -9,7 +9,7 @@ import { Icon } from "../../assets";
 import styles from "./Input.module.css";
 import { InputProps, PasswordInputProps } from "./Input.props";
 
-export const Input = ({ className, label, errorMessage, ...props }: InputProps) => {
+export const Input = ({ className, label, icon, errorMessage, ...props }: InputProps) => {
   const id = useId();
   return (
     <div className={cn(styles.inputBox, className)}>
@@ -18,8 +18,9 @@ export const Input = ({ className, label, errorMessage, ...props }: InputProps) 
           {label}
         </Label.Root>
       )}
+      {icon && <span className={styles.icon}>{icon}</span>}
       <input
-        className={cn(styles.input, { [styles.errorInput]: errorMessage })}
+        className={cn(styles.input, { [styles.errorInput]: errorMessage, [styles.withIcon]: icon })}
         id={id}
         {...props}
       />
