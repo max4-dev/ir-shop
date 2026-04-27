@@ -13,7 +13,7 @@ enum Role {
 }
 
 model Product {
-  id             Int      @id @default(autoincrement())
+  id             Int               @id @default(autoincrement())
   name           String
   image          String
   images         String[]
@@ -23,6 +23,23 @@ model Product {
   isAvailable    Boolean
   availableCount Int
   description    String?
+  categories     CategoryProduct[]
+}
+
+model Category {
+  id       Int               @id @default(autoincrement())
+  name     String            @unique
+  slug     String            @unique
+  products CategoryProduct[]
+}
+
+model CategoryProduct {
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+
+  @@id([productId, categoryId])
 }
 
 model User {

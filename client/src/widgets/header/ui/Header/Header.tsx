@@ -8,7 +8,7 @@ import { useShallow } from "zustand/shallow";
 import { useAuthStore } from "@/src/features/auth/model";
 import { Search } from "@/src/features/search/ui";
 import { Icon } from "@/src/shared/assets";
-import { Dropdown } from "@/src/shared/ui";
+import { Container, Dropdown } from "@/src/shared/ui";
 
 import styles from "./Header.module.css";
 import { HeaderProps } from "./Header.props";
@@ -21,7 +21,7 @@ export const Header = ({ className, ...props }: HeaderProps) => {
   return (
     <header className={cn(className, styles.header)} {...props}>
       <div className={styles.bottom}>
-        <div className="container">
+        <Container>
           <div className={styles.bottomInner}>
             <Link href="/">
               <Image src="/images/logo.svg" width={140} height={22} alt="Логотип ir shop" />
@@ -62,7 +62,7 @@ export const Header = ({ className, ...props }: HeaderProps) => {
               </Dropdown>
             </div>
           </div>
-        </div>
+        </Container>
       </div>
     </header>
   );

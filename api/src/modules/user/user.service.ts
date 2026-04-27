@@ -120,4 +120,10 @@ export class UserService {
 
     return { role: user.role };
   }
+
+  async delete(id: number) {
+    await this.getUserById(id);
+    await this.prisma.user.delete({ where: { id } });
+    return { message: 'Пользователь удалён' };
+  }
 }
