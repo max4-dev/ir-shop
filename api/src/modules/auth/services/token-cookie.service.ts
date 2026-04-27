@@ -19,7 +19,7 @@ export class TokenCookieService {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax' as const,
-      maxAge: TIME.IN_MS.ONE_MINUTE * 5,
+      maxAge: TIME.IN_MS.ONE_DAY * 15,
       path: this.COOKIE_PATH,
     };
   }
@@ -29,7 +29,7 @@ export class TokenCookieService {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax' as const,
-      maxAge: TIME.IN_MS.ONE_MINUTE * 1,
+      maxAge: TIME.IN_MS.ONE_DAY * 5,
       path: this.COOKIE_PATH,
     };
   }

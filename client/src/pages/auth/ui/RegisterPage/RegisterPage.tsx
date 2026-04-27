@@ -1,3 +1,4 @@
+import { Container } from "@/src/shared/ui";
 import { RegisterWidget } from "@/src/widgets/auth/ui";
 
 import styles from "./RegisterPage.module.css";
@@ -5,11 +6,11 @@ import styles from "./RegisterPage.module.css";
 export const RegisterPage = () => {
   return (
     <div className={styles.registerPage}>
-      <div className="container">
+      <Container>
         <div className={styles.inner}>
           <RegisterWidget />
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

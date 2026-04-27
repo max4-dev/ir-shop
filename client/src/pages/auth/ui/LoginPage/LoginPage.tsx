@@ -1,3 +1,4 @@
+import { Container } from "@/src/shared/ui";
 import { LoginWidget } from "@/src/widgets/auth/ui";
 
 import styles from "./LoginPage.module.css";
@@ -5,11 +6,11 @@ import styles from "./LoginPage.module.css";
 export const LoginPage = () => {
   return (
     <div className={styles.loginPage}>
-      <div className="container">
+      <Container>
         <div className={styles.inner}>
           <LoginWidget />
         </div>
-      </div>
+      </Container>
     </div>
   );
 };
