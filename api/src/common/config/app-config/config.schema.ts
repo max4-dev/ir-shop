@@ -13,6 +13,9 @@ export const configSchema = z.object({
   REDIS_PASSWORD: z
     .string()
     .min(16, 'REDIS_PASSWORD must be at least 16 characters'),
+  S3_ACCESS_KEY_ID: z.string(),
+  S3_SECRET_ACCESS_KEY: z.string(),
+  S3_BUCKET_NAME: z.string(),
 });
 
 export type ConfigSchema = z.infer<typeof configSchema>;

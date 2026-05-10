@@ -5,15 +5,32 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
+import { generateSlug } from 'src/common/utils';
+import { v4 as uuidv4 } from 'uuid';
 import { ProductDto } from './dto/product.dto';
 
 @Injectable()
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
-  async getProductById(id: number) {
+  async getProductById(id: string) {
     const product = await this.prisma.product.findUnique({
       where: { id },
+      include: {
+        categories: {
+          include: { category: true },
+        },
+      },
+    });
+
+    if (!product) throw new NotFoundException('Продукт не найден');
+
+    return this.formatProduct(product);
+  }
+
+  async getProductBySlug(slug: string) {
+    const product = await this.prisma.product.findUnique({
+      where: { slug },
       include: {
         categories: {
           include: { category: true },
@@ -70,8 +87,11 @@ export class ProductService {
     const priceWithSale = this.calcPriceWithSale(dto.price, dto.salePercent);
 
     try {
+      const id = uuidv4();
       const product = await this.prisma.product.create({
         data: {
+          id,
+          slug: generateSlug(`${dto.name}-${id}`),
           name: dto.name,
           image: dto.image,
           images: dto.images,
@@ -81,9 +101,9 @@ export class ProductService {
           isAvailable: dto.isAvailable,
           availableCount: dto.availableCount,
           description: dto.description,
-          categories: dto.categoryIds?.length
-            ? { create: dto.categoryIds.map((categoryId) => ({ categoryId })) }
-            : undefined,
+          categories: {
+            create: dto.categoryIds.map((categoryId) => ({ categoryId })),
+          },
         },
         include: {
           categories: {
@@ -98,7 +118,7 @@ export class ProductService {
     }
   }
 
-  async update(id: number, dto: ProductDto) {
+  async update(id: string, dto: ProductDto) {
     await this.getProductById(id);
 
     if (dto.categoryIds?.length) {
@@ -111,15 +131,8 @@ export class ProductService {
       const product = await this.prisma.product.update({
         where: { id },
         data: {
-          name: dto.name,
-          image: dto.image,
-          images: dto.images,
-          price: dto.price,
-          salePercent: dto.salePercent,
+          ...dto,
           priceWithSale,
-          isAvailable: dto.isAvailable,
-          availableCount: dto.availableCount,
-          description: dto.description,
           categories: {
             deleteMany: {},
             ...(dto.categoryIds?.length && {
@@ -140,7 +153,7 @@ export class ProductService {
     }
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     await this.getProductById(id);
     await this.prisma.product.delete({ where: { id } });
     return { message: 'Продукт удалён' };
@@ -153,7 +166,7 @@ export class ProductService {
     };
   }
 
-  private async assertCategoriesExist(ids: number[]) {
+  private async assertCategoriesExist(ids: string[]) {
     const found = await this.prisma.category.findMany({
       where: { id: { in: ids } },
       select: { id: true },

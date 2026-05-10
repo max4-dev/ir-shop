@@ -1,8 +1,12 @@
+export { Badge } from "./Badge/Badge";
+export { Breadcrumb } from "./Breadcrumb/Breadcrumb";
 export { Button } from "./Button/Button";
 export { Card } from "./Card/Card";
 export { Container } from "./Container/Container";
 export { Dropdown } from "./Dropdown/Dropdown";
 export { Input } from "./Input/Input";
 export { Link } from "./Link/Link";
+export { Separator } from "./Separator/Separator";
+export { Title } from "./Title/Title";
 export { Toast } from "./Toast/Toast";
 export { type ToastProps } from "./Toast/Toast.props";

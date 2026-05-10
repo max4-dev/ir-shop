@@ -1,8 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  ArrayMinSize,
   IsArray,
   IsBoolean,
-  IsInt,
   IsNumber,
   IsOptional,
   IsString,
@@ -54,9 +54,9 @@ export class ProductDto {
   @IsNumber()
   salePercent: number;
 
-  @ApiPropertyOptional({ example: [1, 2], description: 'ID категорий' })
+  @ApiProperty({ example: ['1', '2'], description: 'ID категорий' })
   @IsArray()
-  @IsInt({ each: true })
-  @IsOptional()
-  categoryIds?: number[];
+  @ArrayMinSize(1)
+  @IsString({ each: true })
+  categoryIds: string[];
 }

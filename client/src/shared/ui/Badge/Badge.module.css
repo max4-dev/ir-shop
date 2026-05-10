@@ -1,0 +1,26 @@
+.badge {
+  display: inline-block;
+  border-radius: 62px;
+  padding: 6px 14px;
+}
+
+.md {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.lg {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.default {
+  color: var(--dark-gray);
+  font-weight: 400;
+  background-color: var(--secondary);
+}
+
+.danger {
+  background-color: var(--light-red);
+  color: var(--red);
+}

@@ -3,6 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 import { JwtService } from '@nestjs/jwt';
 import { Role, User } from '@prisma/client';
 import { hash, verify } from 'argon2';
@@ -36,6 +37,7 @@ export class AuthService {
 
     const user = await this.prisma.user.create({
       data: {
+        id: uuidv4(),
         email: dto.email,
         name: dto.name,
         role: Role.USER,
@@ -161,7 +163,97 @@ export class AuthService {
     };
   }
 
-  async logout(userId: number, res: Response) {
+  async adminLogin(dto: LoginDto, res: Response) {
+    const user = await this.validateUser(dto);
+
+    if (user.role !== Role.ADMIN) {
+      throw new UnauthorizedException('Доступ запрещён');
+    }
+
+    const tokens = await this.issueTokens(
+      user.id,
+      user.role,
+      user.tokenVersion,
+    );
+
+    await this.tokenService.saveRefreshToken({
+      userId: user.id,
+      refreshToken: tokens.refreshToken,
+      role: user.role,
+    });
+
+    this.cookieService.setAuthCookies(res, {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      userId: user.id,
+    });
+
+    return { accessToken: tokens.accessToken };
+  }
+
+  async getAdminNewTokens(req: Request, res: Response) {
+    const refreshToken = this.cookieService.getRefreshToken(req);
+
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh токен не предоставлен');
+    }
+
+    let payload: IJWTPayload;
+
+    try {
+      payload = await this.jwt.verifyAsync(refreshToken);
+    } catch {
+      throw new UnauthorizedException('Неверный refresh токен');
+    }
+
+    if (payload.role !== Role.ADMIN) {
+      throw new UnauthorizedException('Доступ запрещён');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.id },
+    });
+
+    if (!user) throw new UnauthorizedException('Пользователь не найден');
+
+    if (user.tokenVersion !== payload.tokenVersion) {
+      throw new UnauthorizedException(
+        'Токен устарел. Пожалуйста, войдите снова',
+      );
+    }
+
+    const isValidToken = await this.tokenService.validateRefreshToken(
+      user.id,
+      refreshToken,
+    );
+
+    if (!isValidToken)
+      throw new UnauthorizedException('Токен недействителен или истёк');
+
+    await this.tokenService.removeRefreshToken(user.id);
+
+    const tokens = await this.issueTokens(
+      user.id,
+      user.role,
+      user.tokenVersion,
+    );
+
+    await this.tokenService.saveRefreshToken({
+      userId: user.id,
+      refreshToken: tokens.refreshToken,
+      role: user.role,
+    });
+
+    this.cookieService.setAuthCookies(res, {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      userId: user.id,
+    });
+
+    return { accessToken: tokens.accessToken };
+  }
+
+  async logout(userId: string, res: Response) {
     await this.tokenService.removeRefreshToken(userId);
     this.cookieService.clearAuthCookie(res);
     return { message: 'Успешный выход' };
@@ -185,7 +277,7 @@ export class AuthService {
     return user;
   }
 
-  private async issueTokens(userId: number, role: Role, tokenVersion: number) {
+  private async issueTokens(userId: string, role: Role, tokenVersion: number) {
     const data: IJWTPayload = { id: userId, role, tokenVersion };
 
     const accessToken = this.jwt.sign(data, {

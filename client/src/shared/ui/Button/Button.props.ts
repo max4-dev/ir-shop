@@ -4,6 +4,6 @@ export interface ButtonProps extends Omit<
   DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
   "onAnimationStart" | "onDragStart" | "onDragEnd" | "onDrag" | "ref"
 > {
-  size?: "small" | "medium" | "big";
+  size?: "sm" | "md" | "lg";
   appearance?: "primary" | "ghost" | "disabled";
 }

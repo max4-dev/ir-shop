@@ -29,7 +29,7 @@ export class UserService {
     return users;
   }
 
-  async getUserById(id: number) {
+  async getUserById(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
       select: {
@@ -47,7 +47,7 @@ export class UserService {
     return user;
   }
 
-  async updateProfile(id: number, dto: UserProfileDto) {
+  async updateProfile(id: string, dto: UserProfileDto) {
     const existUser = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -77,7 +77,7 @@ export class UserService {
     }
   }
 
-  async updatePassword(id: number, dto: UserPasswordDto) {
+  async updatePassword(id: string, dto: UserPasswordDto) {
     const user = await this.prisma.user.findUnique({
       where: { id },
     });
@@ -109,7 +109,7 @@ export class UserService {
     }
   }
 
-  async checkRole(userId: number) {
+  async checkRole(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -121,7 +121,7 @@ export class UserService {
     return { role: user.role };
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     await this.getUserById(id);
     await this.prisma.user.delete({ where: { id } });
     return { message: 'Пользователь удалён' };

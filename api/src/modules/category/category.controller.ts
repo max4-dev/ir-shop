@@ -8,13 +8,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import {
-  ApiCookieAuth,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 import { Auth } from '../auth/decorators/auth.decorator';
 import { CategoryService } from './category.service';
@@ -37,13 +31,12 @@ export class CategoryController {
   @ApiResponse({ status: 200, description: 'Категория' })
   @ApiResponse({ status: 404, description: 'Категория не найдена' })
   @Get(':id')
-  async getById(@Param('id', ParseIntPipe) id: number) {
+  async getById(@Param('id', ParseIntPipe) id: string) {
     return this.categoryService.getById(id);
   }
 
   @ApiOperation({ summary: 'Создать категорию' })
   @ApiResponse({ status: 201, description: 'Категория создана' })
-  @ApiCookieAuth('access_token')
   @Auth(Role.ADMIN)
   @Post()
   async create(@Body() dto: CategoryDto) {
@@ -54,11 +47,10 @@ export class CategoryController {
   @ApiParam({ name: 'id', example: 1 })
   @ApiResponse({ status: 200, description: 'Категория обновлена' })
   @ApiResponse({ status: 404, description: 'Категория не найдена' })
-  @ApiCookieAuth('access_token')
   @Auth(Role.ADMIN)
   @Put(':id')
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Body() dto: CategoryDto,
   ) {
     return this.categoryService.update(id, dto);
@@ -68,10 +60,9 @@ export class CategoryController {
   @ApiParam({ name: 'id', example: 1 })
   @ApiResponse({ status: 200, description: 'Категория удалена' })
   @ApiResponse({ status: 404, description: 'Категория не найдена' })
-  @ApiCookieAuth('access_token')
   @Auth(Role.ADMIN)
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Param('id', ParseIntPipe) id: string) {
     return this.categoryService.delete(id);
   }
 }

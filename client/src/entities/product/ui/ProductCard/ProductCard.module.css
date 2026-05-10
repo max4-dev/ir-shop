@@ -1,0 +1,64 @@
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 295px;
+  overflow: hidden;
+}
+
+.card:hover .slots {
+  transform: translateY(0);
+}
+
+.image {
+  border-radius: 20px;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+.title {
+  margin-bottom: 8px;
+}
+
+.categories {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.priceBox {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.price {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.originalPrice {
+  color: var(--gray);
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: line-through;
+}
+
+.slots {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  transform: translateY(-200%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.slots:focus-within {
+  transform: translateY(0);
+}
+
+@media (hover: none) {
+  .slots {
+    transform: translateY(0);
+  }
+}

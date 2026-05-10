@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
+import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,17 +26,19 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalFilters(new PrismaExceptionFilter());
+
   const config = new DocumentBuilder()
     .setTitle('Shop API')
     .setDescription('API интернет-магазина')
     .setVersion('1.0')
-    .addCookieAuth('access_token')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
+      withCredentials: true,
     },
   });
 

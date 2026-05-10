@@ -1,3 +1,7 @@
+.header {
+  margin-bottom: 30px;
+}
+
 .bottomInner {
   display: flex;
   justify-content: space-between;

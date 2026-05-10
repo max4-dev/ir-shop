@@ -1,0 +1,21 @@
+.wrapper {
+  container-type: inline-size;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, 295px);
+  gap: 28px 20px;
+}
+
+@container (width < 940px) {
+  .list {
+    grid-template-columns: repeat(2, 295px);
+  }
+}
+
+@container (width < 635px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+}

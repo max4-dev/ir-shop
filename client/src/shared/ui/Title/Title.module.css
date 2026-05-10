@@ -1,0 +1,31 @@
+.xxl {
+  font-size: 48px;
+  font-weight: 700;
+  font-family: var(--font-montserrat);
+}
+
+.xl {
+  font-size: 40px;
+  font-weight: 700;
+  font-family: var(--font-montserrat);
+}
+
+.lg {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.md {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.sm {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.xs {
+  font-size: 14px;
+  font-weight: 700;
+}

@@ -1,0 +1,23 @@
+.gallery {
+  max-width: 530px;
+  width: 100%;
+}
+
+.slider {
+  margin-bottom: 14px;
+  width: 530px;
+}
+
+.sliderImg {
+  border-radius: 20px;
+}
+
+/* .sliderThumbs {
+  width: 152px;
+  height: 530px;
+  flex-shrink: 0;
+}
+
+.sliderThumb {
+  height: 168px;
+} */

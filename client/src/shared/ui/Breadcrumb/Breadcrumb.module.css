@@ -1,0 +1,22 @@
+.breadcrumb {
+  color: var(--dark-gray);
+  margin-bottom: 24px;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.icon {
+  vertical-align: middle;
+  width: 7px;
+  height: 12px;
+}
+
+.page {
+  color: var(--black);
+}

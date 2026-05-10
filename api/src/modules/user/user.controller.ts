@@ -7,13 +7,7 @@ import {
   ParseIntPipe,
   Put,
 } from '@nestjs/common';
-import {
-  ApiCookieAuth,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 import { Auth } from '../auth/decorators/auth.decorator';
 import { CurrentUser } from './decorators/user.decorator';
@@ -21,7 +15,6 @@ import { UserPasswordDto, UserProfileDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
 @ApiTags('Пользователи')
-@ApiCookieAuth('access_token')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -40,7 +33,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: 'Не авторизован' })
   @Get('profile')
   @Auth()
-  async getProfile(@CurrentUser('id') id: number) {
+  async getProfile(@CurrentUser('id') id: string) {
     return this.userService.getUserById(id);
   }
 
@@ -51,7 +44,7 @@ export class UserController {
   @Put('profile')
   @Auth()
   async updateProfile(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Body() dto: UserProfileDto,
   ) {
     return this.userService.updateProfile(id, dto);
@@ -64,7 +57,7 @@ export class UserController {
   @Put('password')
   @Auth()
   async updatePassword(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Body() dto: UserPasswordDto,
   ) {
     return this.userService.updatePassword(id, dto);
@@ -79,7 +72,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: 'Не авторизован' })
   @Get('role')
   @Auth()
-  async checkRole(@CurrentUser('id') userId: number) {
+  async checkRole(@CurrentUser('id') userId: string) {
     return this.userService.checkRole(userId);
   }
 
@@ -90,7 +83,7 @@ export class UserController {
   @ApiResponse({ status: 403, description: 'Нет доступа' })
   @Get(':id')
   @Auth(Role.ADMIN)
-  async getUserById(@Param('id', ParseIntPipe) id: number) {
+  async getUserById(@Param('id', ParseIntPipe) id: string) {
     return this.userService.getUserById(id);
   }
 
@@ -101,7 +94,7 @@ export class UserController {
   @ApiResponse({ status: 403, description: 'Нет доступа' })
   @Delete(':id')
   @Auth(Role.ADMIN)
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Param('id', ParseIntPipe) id: string) {
     return this.userService.delete(id);
   }
 }

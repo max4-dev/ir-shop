@@ -4,7 +4,7 @@ import { RedisService } from 'src/common/redis/redis.service';
 import { TIME } from '../constants';
 
 export interface TokenData {
-  userId: number;
+  userId: string;
   refreshToken: string;
   role: string;
 }
@@ -15,7 +15,7 @@ export class TokenService {
 
   constructor(private redisService: RedisService) {}
 
-  private getRefreshTokenKey(userId: number): string {
+  private getRefreshTokenKey(userId: string): string {
     return `${this.REFRESH_TOKEN_PREFIX}${userId}`;
   }
 
@@ -28,7 +28,7 @@ export class TokenService {
   }
 
   async validateRefreshToken(
-    userId: number,
+    userId: string,
     refreshToken: string,
   ): Promise<boolean> {
     const key = this.getRefreshTokenKey(userId);
@@ -37,16 +37,16 @@ export class TokenService {
     return await verify(storedTokenHash, refreshToken);
   }
 
-  async removeRefreshToken(userId: number): Promise<void> {
+  async removeRefreshToken(userId: string): Promise<void> {
     const key = this.getRefreshTokenKey(userId);
     await this.redisService.getClient().del(key);
   }
 
-  async removeAllUserTokens(userId: number): Promise<void> {
+  async removeAllUserTokens(userId: string): Promise<void> {
     await this.removeRefreshToken(userId);
   }
 
-  async getTokenKey(userId: number): Promise<string | null> {
+  async getTokenKey(userId: string): Promise<string | null> {
     const key = this.getRefreshTokenKey(userId);
     const exists = await this.redisService.getClient().exists(key);
     return exists ? key : null;

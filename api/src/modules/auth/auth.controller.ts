@@ -50,10 +50,28 @@ export class AuthController {
     return { user };
   }
 
+  @Throttle({ default: { limit: 10, ttl: 60 } })
+  @Post('admin/login')
+  async adminLogin(
+    @Body() dto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.adminLogin(dto, res);
+  }
+
+  @Throttle({ default: { limit: 20, ttl: 60 } })
+  @Post('admin/refresh-token')
+  async getAdminNewTokens(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.getAdminNewTokens(req, res);
+  }
+
   @Auth()
   @Post('logout')
   async logout(
-    @CurrentUser('id') userId: number,
+    @CurrentUser('id') userId: string,
     @Res({ passthrough: true }) res: Response,
   ) {
     return this.authService.logout(userId, res);
