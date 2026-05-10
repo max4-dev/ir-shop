@@ -5,7 +5,8 @@ import cn from "classnames";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { getErrorMessage, useToast } from "@/src/shared/lib";
+import { getErrorMessage } from "@/src/shared/lib";
+import { useToast } from "@/src/shared/lib/hooks";
 import { Button, Input, Toast } from "@/src/shared/ui";
 
 import { RegisterDTO } from "../../api";

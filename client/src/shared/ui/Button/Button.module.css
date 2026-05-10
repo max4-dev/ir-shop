@@ -7,18 +7,21 @@
   font-size: 16px;
   border-radius: 62px;
   gap: 12px;
-  background-color: var(--black);
-  border: 1px solid var(--black);
 }
 
-.small {
+.sm {
   padding: 13px 28px;
 }
 
-.big {
+.lg {
   width: 100%;
   max-width: 457px;
   padding: 19px 80px;
+}
+
+.primary {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
 }
 
 .ghost {

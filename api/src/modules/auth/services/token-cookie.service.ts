@@ -5,7 +5,7 @@ import { TIME } from 'src/common/constants';
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
-  userId: number;
+  userId: string;
 }
 
 @Injectable()

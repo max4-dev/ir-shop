@@ -1,10 +1,7 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/common/database/prisma.service';
 import { generateSlug } from 'src/common/utils';
+import { v4 as uuidv4 } from 'uuid';
 import { CategoryDto } from './dto/category.dto';
 
 @Injectable()
@@ -17,7 +14,7 @@ export class CategoryService {
     });
   }
 
-  async getById(id: number) {
+  async getById(id: string) {
     const category = await this.prisma.category.findUnique({ where: { id } });
 
     if (!category) throw new NotFoundException('Категория не найдена');
@@ -26,37 +23,26 @@ export class CategoryService {
   }
 
   async create(dto: CategoryDto) {
-    try {
-      const category = await this.prisma.category.create({
-        data: { name: dto.name, slug: '' },
-      });
-
-      return await this.prisma.category.update({
-        where: { id: category.id },
-        data: { slug: `${generateSlug(dto.name)}-${category.id}` },
-      });
-    } catch {
-      throw new InternalServerErrorException('Ошибка при создании категории');
-    }
+    const id = uuidv4();
+    const category = await this.prisma.category.create({
+      data: { id, name: dto.name, slug: `${generateSlug(dto.name)}-${id}` },
+    });
+    return category;
   }
 
-  async update(id: number, dto: CategoryDto) {
+  async update(id: string, dto: CategoryDto) {
     await this.getById(id);
 
-    try {
-      return await this.prisma.category.update({
-        where: { id },
-        data: {
-          name: dto.name,
-          slug: `${generateSlug(dto.name)}-${id}`,
-        },
-      });
-    } catch {
-      throw new InternalServerErrorException('Ошибка при обновлении категории');
-    }
+    return await this.prisma.category.update({
+      where: { id },
+      data: {
+        name: dto.name,
+        slug: `${generateSlug(dto.name)}-${id}`,
+      },
+    });
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     await this.getById(id);
     await this.prisma.category.delete({ where: { id } });
     return { message: 'Категория удалена' };

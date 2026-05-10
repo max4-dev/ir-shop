@@ -1,0 +1,49 @@
+.layout {
+  display: flex;
+  gap: 40px;
+}
+
+.title {
+  margin-bottom: 13px;
+}
+
+.priceBox {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 19px;
+}
+
+.price {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.originalPrice {
+  color: var(--gray);
+  font-size: 32px;
+  font-weight: 700;
+  text-decoration: line-through;
+}
+
+.text {
+  color: var(--dark-gray);
+}
+
+.categories {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.categoryList {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (width <= 1024px) {
+  .layout {
+    flex-direction: column;
+  }
+}

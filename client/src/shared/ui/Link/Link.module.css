@@ -7,8 +7,6 @@
   font-size: 16px;
   border-radius: 62px;
   gap: 12px;
-  background-color: var(--black);
-  border: 1px solid var(--black);
 }
 
 .small {
@@ -30,6 +28,11 @@
   font-weight: 400;
   font-size: 16px;
   text-decoration: underline;
+}
+
+.primary {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
 }
 
 .ghost {

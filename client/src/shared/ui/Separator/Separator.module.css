@@ -1,0 +1,19 @@
+.separator {
+  background-color: var(--border-gray);
+  &[data-orientation="horizontal"] {
+    width: 100%;
+    height: 1px;
+  }
+  &[data-orientation="vertical"] {
+    width: 1px;
+    height: 100%;
+  }
+}
+
+.sm {
+  margin: 16px 0;
+}
+
+.md {
+  margin: 23px 0;
+}

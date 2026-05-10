@@ -5,6 +5,8 @@ import { AppProvider } from "@/src/app/providers";
 import type { Metadata } from "next";
 
 import "@src/app/styles/style.css";
+import "swiper/css";
+import "swiper/css/thumbs";
 
 const manrope = Manrope({
   variable: "--font-manrope",
