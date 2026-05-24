@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Controller,
   Post,
   Query,
@@ -7,47 +6,44 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Role } from '@prisma/client';
-import { UploadCommand } from 'src/common/integrations/bucket/command/upload/upload.command';
-import { v4 } from 'uuid';
 import { Auth } from '../auth/decorators/auth.decorator';
 import {
   ApiMultipleFilesUpload,
   ApiSingleFileUpload,
 } from './decorators/api-file-upload.decorator';
-import { GenerateService } from './generate.service';
+import { UploadMediaQueryDto } from './dto/upload-media.dto';
+import { MEDIA_FIELD_NAME, MEDIA_LIMITS } from './media.constants';
+import { MediaService } from './media.service';
 import { ApiUploadErrorResponses } from './responses/upload.responses';
 
 @ApiTags('Media')
+@ApiBearerAuth()
 @Controller('media')
 export class MediaController {
-  constructor(
-    private readonly commandBus: CommandBus,
-    private readonly generateService: GenerateService,
-  ) {}
+  constructor(private readonly mediaService: MediaService) {}
 
   @ApiOperation({
     summary: 'Загрузка изображения с конвертацией в WebP',
     description:
       'Загружает изображение, конвертирует в WebP и сохраняет в хранилище. Только для администраторов.',
   })
-  @ApiSingleFileUpload('media')
+  @ApiSingleFileUpload(MEDIA_FIELD_NAME)
   @ApiOkResponse({
     description: 'Изображение успешно загружено и конвертировано',
     schema: {
       type: 'object',
       properties: {
-        urls: {
-          type: 'object',
-          properties: {
-            webP: {
-              type: 'string',
-              example: 'https://storage.example.com/images/products/uuid.webp',
-            },
-          },
+        url: {
+          type: 'string',
+          example: 'https://storage.example.com/images/products/uuid.webp',
         },
       },
     },
@@ -56,28 +52,15 @@ export class MediaController {
   @Auth(Role.ADMIN)
   @Post('upload-image')
   @UseInterceptors(
-    FilesInterceptor('media', 10, {
-      limits: { fileSize: 50 * 1024 * 1024 },
+    FilesInterceptor(MEDIA_FIELD_NAME, MEDIA_LIMITS.MAX_FILES, {
+      limits: { fileSize: MEDIA_LIMITS.MAX_FILE_SIZE_BYTES },
     }),
   )
-  async uploadImage(
+  uploadImage(
     @UploadedFile() file: Express.Multer.File,
-    @Query('folder') folder: string,
+    @Query() query: UploadMediaQueryDto,
   ) {
-    if (!folder)
-      throw new BadRequestException('Укажите сущность для сохранения');
-    if (!file) throw new BadRequestException('Файл не найден');
-
-    const filename = v4();
-    const webP = await this.generateService.convertToWebP(file.buffer, 100);
-    const resWebP = await this.commandBus.execute(
-      new UploadCommand(
-        webP,
-        `images/${folder}/${filename}.webp`,
-        'image/webp',
-      ),
-    );
-    return { urls: { webP: resWebP.Location } };
+    return this.mediaService.uploadImage(file, query.folder);
   }
 
   @ApiOperation({
@@ -85,7 +68,7 @@ export class MediaController {
     description:
       'Принимает несколько изображений, конвертирует каждое в WebP. Только для администраторов.',
   })
-  @ApiMultipleFilesUpload('media')
+  @ApiMultipleFilesUpload(MEDIA_FIELD_NAME)
   @ApiOkResponse({
     description: 'Все изображения успешно загружены',
     schema: {
@@ -105,31 +88,14 @@ export class MediaController {
   @Auth(Role.ADMIN)
   @Post('upload-images')
   @UseInterceptors(
-    FilesInterceptor('media', 10, {
-      limits: { fileSize: 50 * 1024 * 1024 },
+    FilesInterceptor(MEDIA_FIELD_NAME, MEDIA_LIMITS.MAX_FILES, {
+      limits: { fileSize: MEDIA_LIMITS.MAX_FILE_SIZE_BYTES },
     }),
   )
-  async uploadImages(
+  uploadImages(
     @UploadedFiles() files: Express.Multer.File[],
-    @Query('folder') folder: string,
+    @Query() query: UploadMediaQueryDto,
   ) {
-    if (!folder) throw new BadRequestException('Укажите папку');
-    if (!files?.length) throw new BadRequestException('Файлы не найдены');
-
-    const urls = await Promise.all(
-      files.map(async (file) => {
-        const filename = v4();
-        const webP = await this.generateService.convertToWebP(file.buffer, 100);
-        const res = await this.commandBus.execute(
-          new UploadCommand(
-            webP,
-            `images/${folder}/${filename}.webp`,
-            'image/webp',
-          ),
-        );
-        return res.Location;
-      }),
-    );
-    return { urls };
+    return this.mediaService.uploadImages(files, query.folder);
   }
 }

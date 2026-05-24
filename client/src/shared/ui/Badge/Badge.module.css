@@ -20,6 +20,11 @@
   background-color: var(--secondary);
 }
 
+.success {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
 .danger {
   background-color: var(--light-red);
   color: var(--red);

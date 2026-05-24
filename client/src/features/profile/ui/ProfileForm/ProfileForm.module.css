@@ -1,0 +1,10 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.submit {
+  align-self: flex-start;
+  min-width: 200px;
+}

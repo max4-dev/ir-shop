@@ -3,3 +3,22 @@
   flex-direction: column;
   gap: 20px;
 }
+
+.forgot {
+  margin: -8px 0 0;
+  font-size: 14px;
+}
+
+.unverified {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background-color: var(--light-gray);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.unverified p {
+  margin: 0;
+}

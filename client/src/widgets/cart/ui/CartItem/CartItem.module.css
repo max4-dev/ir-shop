@@ -1,0 +1,91 @@
+.item {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border-gray);
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.imageLink {
+  display: block;
+  flex-shrink: 0;
+}
+
+.image {
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.info {
+  min-width: 0;
+}
+
+.name {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--black);
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.name:hover {
+  color: var(--primary);
+}
+
+.unavailable {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--red);
+  font-size: 14px;
+}
+
+.prices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+}
+
+.unitPrice {
+  color: var(--dark-gray);
+  font-size: 14px;
+}
+
+.subtotal {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.originalSubtotal {
+  color: var(--gray);
+  font-size: 16px;
+  text-decoration: line-through;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+@media (width <= 768px) {
+  .item {
+    grid-template-columns: 80px 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+  }
+
+  .actions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

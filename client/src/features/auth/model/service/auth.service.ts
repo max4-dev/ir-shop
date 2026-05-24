@@ -1,4 +1,12 @@
-import { authQuery, LoginDTO, RegisterDTO } from "../../api";
+import {
+  authQuery,
+  ForgotPasswordDTO,
+  LoginDTO,
+  RegisterDTO,
+  ResendVerificationDTO,
+  ResetPasswordDTO,
+  VerifyEmailDTO,
+} from "../../api";
 
 export const authService = {
   async initialize() {
@@ -12,8 +20,23 @@ export const authService = {
   },
 
   async register(data: RegisterDTO) {
-    await authQuery.register(data);
-    return true;
+    return authQuery.register(data);
+  },
+
+  async verifyEmail(data: VerifyEmailDTO) {
+    return authQuery.verifyEmail(data);
+  },
+
+  async resendVerification(data: ResendVerificationDTO) {
+    return authQuery.resendVerification(data);
+  },
+
+  async forgotPassword(data: ForgotPasswordDTO) {
+    return authQuery.forgotPassword(data);
+  },
+
+  async resetPassword(data: ResetPasswordDTO) {
+    return authQuery.resetPassword(data);
   },
 
   async logout() {

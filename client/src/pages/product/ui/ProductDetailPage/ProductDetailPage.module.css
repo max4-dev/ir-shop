@@ -1,6 +1,29 @@
+.page {
+  container-type: inline-size;
+  container-name: product-detail;
+  padding-bottom: 48px;
+}
+
+.breadcrumb {
+  margin-bottom: 24px;
+}
+
 .layout {
   display: flex;
+  align-items: flex-start;
   gap: 40px;
+}
+
+.gallery {
+  flex: 0 1 530px;
+  width: 100%;
+  min-width: 0;
+  max-width: 530px;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
 }
 
 .title {
@@ -9,6 +32,7 @@
 
 .priceBox {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 14px;
   margin-bottom: 19px;
@@ -38,12 +62,71 @@
 
 .categoryList {
   display: flex;
-  gap: 12px;
   flex-wrap: wrap;
+  gap: 12px;
 }
 
-@media (width <= 1024px) {
+@container product-detail (width <= 1024px) {
   .layout {
     flex-direction: column;
+    gap: 32px;
+  }
+
+  .gallery {
+    flex: none;
+    max-width: none;
+  }
+}
+
+@container product-detail (width <= 768px) {
+  .breadcrumb {
+    margin-bottom: 16px;
+  }
+
+  .layout {
+    gap: 24px;
+  }
+
+  .title {
+    margin-bottom: 10px;
+  }
+
+  .price,
+  .originalPrice {
+    font-size: 28px;
+  }
+
+  .priceBox {
+    margin-bottom: 16px;
+  }
+}
+
+@container product-detail (width <= 480px) {
+  .layout {
+    gap: 20px;
+  }
+
+  .price,
+  .originalPrice {
+    font-size: 24px;
+  }
+
+  .priceBox {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .categories {
+    gap: 12px;
+  }
+
+  .categoryList {
+    gap: 8px;
+  }
+}
+
+@media (width <= 480px) {
+  .page {
+    padding-bottom: 32px;
   }
 }

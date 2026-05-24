@@ -8,6 +8,7 @@ import { useShallow } from "zustand/shallow";
 import { useAuthStore } from "@/src/features/auth/model";
 import { Search } from "@/src/features/search/ui";
 import { Icon } from "@/src/shared/assets";
+import { ROUTES } from "@/src/shared/config";
 import { Container, Dropdown } from "@/src/shared/ui";
 
 import styles from "./Header.module.css";
@@ -23,26 +24,35 @@ export const Header = ({ className, ...props }: HeaderProps) => {
       <div className={styles.bottom}>
         <Container>
           <div className={styles.bottomInner}>
-            <Link href="/">
-              <Image src="/images/logo.svg" width={140} height={22} alt="Логотип ir shop" />
+            <Link href="/" className={styles.logo}>
+              <Image
+                src="/images/logo.svg"
+                width={140}
+                height={22}
+                alt="Логотип ir shop"
+                className={styles.logoImage}
+              />
             </Link>
             <Search className={styles.search} />
             <div className={styles.actions}>
-              <Link href="/favorites">
+              <Link href={ROUTES.FAVORITES} className={styles.actionButton} aria-label="Избранное">
                 <Icon.Favorite width={25} height={22} />
               </Link>
-              <Link href="/cart">
+              <Link href="/cart" className={styles.actionButton} aria-label="Корзина">
                 <Icon.Cart width={24} height={22} />
               </Link>
               <Dropdown>
-                <Dropdown.Trigger>
+                <Dropdown.Trigger className={styles.actionButton} aria-label="Меню пользователя">
                   <Icon.User width={24} height={24} />
                 </Dropdown.Trigger>
                 <Dropdown.Content>
+                  <Dropdown.Item asChild>
+                    <Link href={ROUTES.ORDERS.ROOT}>Мои заказы</Link>
+                  </Dropdown.Item>
                   {isAuthenticated ? (
                     <>
                       <Dropdown.Item asChild>
-                        <Link href="/profile">Профиль</Link>
+                        <Link href={ROUTES.PROFILE}>Профиль</Link>
                       </Dropdown.Item>
                       <Dropdown.Item>
                         <button onClick={() => logout()}>Выйти</button>

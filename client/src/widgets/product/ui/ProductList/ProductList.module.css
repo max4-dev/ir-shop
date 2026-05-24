@@ -8,7 +8,7 @@
   gap: 28px 20px;
 }
 
-@container (width < 940px) {
+@container (width < 900px) {
   .list {
     grid-template-columns: repeat(2, 295px);
   }

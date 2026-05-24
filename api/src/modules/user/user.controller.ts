@@ -4,7 +4,7 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -77,24 +77,24 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Получить пользователя по ID (только админ)' })
-  @ApiParam({ name: 'id', example: 1 })
+  @ApiParam({ name: 'id', example: 'e4a4f6e2-1a4a-4d28-8a2b-9b8a1d6c0f01' })
   @ApiResponse({ status: 200, description: 'Пользователь' })
   @ApiResponse({ status: 404, description: 'Пользователь не найден' })
   @ApiResponse({ status: 403, description: 'Нет доступа' })
   @Get(':id')
   @Auth(Role.ADMIN)
-  async getUserById(@Param('id', ParseIntPipe) id: string) {
+  async getUserById(@Param('id', ParseUUIDPipe) id: string) {
     return this.userService.getUserById(id);
   }
 
   @ApiOperation({ summary: 'Удалить пользователя (только админ)' })
-  @ApiParam({ name: 'id', example: 1 })
+  @ApiParam({ name: 'id', example: 'e4a4f6e2-1a4a-4d28-8a2b-9b8a1d6c0f01' })
   @ApiResponse({ status: 200, description: 'Пользователь удалён' })
   @ApiResponse({ status: 404, description: 'Пользователь не найден' })
   @ApiResponse({ status: 403, description: 'Нет доступа' })
   @Delete(':id')
   @Auth(Role.ADMIN)
-  async delete(@Param('id', ParseIntPipe) id: string) {
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
     return this.userService.delete(id);
   }
 }

@@ -11,20 +11,14 @@ import { ProductImageGalleryProps } from "./ProductImageGallery.props";
 
 import type { Swiper as SwiperType } from "swiper/types";
 
-// const breakpoints = {
-//   0: {
-//     slidesPerView: 1.5,
-//   },
-//   320: {
-//     slidesPerView: 2,
-//   },
-//   400: {
-//     slidesPerView: 3,
-//   },
-//   768: {
-//     slidesPerView: 4,
-//   },
-// };
+const THUMBS_BREAKPOINTS = {
+  480: {
+    slidesPerView: 4,
+  },
+  768: {
+    slidesPerView: 5,
+  },
+};
 
 export const ProductImageGallery = ({ className, images, ...props }: ProductImageGalleryProps) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
@@ -34,7 +28,7 @@ export const ProductImageGallery = ({ className, images, ...props }: ProductImag
       <Swiper
         spaceBetween={10}
         navigation={false}
-        allowTouchMove={false}
+        allowTouchMove
         thumbs={{ swiper: thumbsSwiper }}
         modules={[Thumbs]}
         className={styles.slider}
@@ -49,9 +43,11 @@ export const ProductImageGallery = ({ className, images, ...props }: ProductImag
         onSwiper={setThumbsSwiper}
         spaceBetween={14}
         slidesPerView={3}
+        breakpoints={THUMBS_BREAKPOINTS}
         scrollbar={false}
-        modules={[Thumbs]}
-        // breakpoints={breakpoints}
+        modules={[Thumbs, FreeMode]}
+        freeMode
+        watchSlidesProgress
         className={styles.sliderThumbs}
       >
         {images.map((image, index) => (

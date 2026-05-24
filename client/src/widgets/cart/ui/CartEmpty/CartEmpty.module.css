@@ -1,0 +1,23 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 12px;
+}
+
+.text {
+  max-width: 400px;
+  margin-bottom: 24px;
+  color: var(--dark-gray);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.link {
+  padding: 13px 32px;
+}

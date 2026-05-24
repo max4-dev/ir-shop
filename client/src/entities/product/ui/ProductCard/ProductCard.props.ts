@@ -7,5 +7,6 @@ export interface ProductCardProps extends DetailedHTMLProps<
   HTMLElement
 > {
   product: Product;
+  leftButtonSlot?: React.ReactNode;
   rightButtonSlot?: React.ReactNode;
 }

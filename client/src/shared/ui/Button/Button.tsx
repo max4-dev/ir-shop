@@ -5,7 +5,7 @@ import { ButtonProps } from "./Button.props";
 
 export const Button = ({
   className,
-  size = "medium",
+  size = "md",
   appearance = "primary",
   children,
   ...props

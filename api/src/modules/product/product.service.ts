@@ -1,97 +1,152 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { PrismaService } from 'src/common/database/prisma.service';
-import { generateSlug } from 'src/common/utils';
-import { v4 as uuidv4 } from 'uuid';
-import { ProductDto } from './dto/product.dto';
+import { generateSlug, isPrismaRecordNotFound } from 'src/common/utils';
+import { PRODUCT_DEFAULTS } from './constants/product.constants';
+import { CreateProductDto } from './dto/create-product.dto';
+import { GetAllProductsRequestDto } from './dto/get-all-products.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { calcPriceWithSale } from './helpers/product.helpers';
+import {
+  formatProduct,
+  productInclude,
+  ProductResponse,
+} from './product.mapper';
+import {
+  buildProductOrderBy,
+  buildProductWhere,
+} from './product.query-builder';
+import { PaginatedProducts, ProductsByCategory } from './product.types';
 
 @Injectable()
 export class ProductService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async getProductById(id: string) {
-    const product = await this.prisma.product.findUnique({
-      where: { id },
-      include: {
-        categories: {
-          include: { category: true },
-        },
-      },
-    });
+  async getAll(query: GetAllProductsRequestDto): Promise<PaginatedProducts> {
+    const where = buildProductWhere(query);
+    const orderBy = buildProductOrderBy(query.sort);
 
-    if (!product) throw new NotFoundException('Продукт не найден');
-
-    return this.formatProduct(product);
-  }
-
-  async getProductBySlug(slug: string) {
-    const product = await this.prisma.product.findUnique({
-      where: { slug },
-      include: {
-        categories: {
-          include: { category: true },
-        },
-      },
-    });
-
-    if (!product) throw new NotFoundException('Продукт не найден');
-
-    return this.formatProduct(product);
-  }
-
-  async getAll() {
-    const products = await this.prisma.product.findMany({
-      orderBy: { id: 'desc' },
-      include: {
-        categories: {
-          include: { category: true },
-        },
-      },
-    });
-
-    return products.map(this.formatProduct);
-  }
-
-  async getByCategory(categorySlug: string) {
-    const category = await this.prisma.category.findUnique({
-      where: { slug: categorySlug },
-    });
-
-    if (!category) throw new NotFoundException('Категория не найдена');
-
-    const products = await this.prisma.product.findMany({
-      where: { categories: { some: { categoryId: category.id } } },
-      orderBy: { id: 'desc' },
-      include: {
-        categories: {
-          include: { category: true },
-        },
-      },
-    });
+    const [products, total] = await this.prisma.$transaction([
+      this.prisma.product.findMany({
+        where,
+        orderBy,
+        skip: query.offset,
+        take: query.limit,
+        include: productInclude,
+      }),
+      this.prisma.product.count({ where }),
+    ]);
 
     return {
-      category,
-      items: products.map(this.formatProduct),
+      products: products.map(formatProduct),
+      total,
+      limit: query.limit,
+      offset: query.offset,
     };
   }
 
-  async create(dto: ProductDto) {
+  async getById(id: string): Promise<ProductResponse> {
+    const product = await this.prisma.product.findUnique({
+      where: { id },
+      include: productInclude,
+    });
+    if (!product) {
+      throw new NotFoundException('Продукт не найден');
+    }
+    return formatProduct(product);
+  }
+
+  async getBySlug(slug: string): Promise<ProductResponse> {
+    const product = await this.prisma.product.findUnique({
+      where: { slug },
+      include: productInclude,
+    });
+    if (!product) {
+      throw new NotFoundException('Продукт не найден');
+    }
+    return formatProduct(product);
+  }
+
+  async getByCategory(
+    slug: string,
+    query: GetAllProductsRequestDto,
+  ): Promise<ProductsByCategory> {
+    const category = await this.prisma.category.findUnique({
+      where: { slug },
+    });
+    if (!category) {
+      throw new NotFoundException('Категория не найдена');
+    }
+
+    const where = {
+      ...buildProductWhere(query),
+      categories: { some: { categoryId: category.id } },
+    };
+
+    const [products, total] = await this.prisma.$transaction([
+      this.prisma.product.findMany({
+        where,
+        orderBy: buildProductOrderBy(query.sort),
+        skip: query.offset,
+        take: query.limit,
+        include: productInclude,
+      }),
+      this.prisma.product.count({ where }),
+    ]);
+
+    return {
+      category,
+      products: products.map(formatProduct),
+      total,
+      limit: query.limit,
+      offset: query.offset,
+    };
+  }
+
+  async create(dto: CreateProductDto): Promise<ProductResponse> {
+    await this.assertCategoriesExist(dto.categoryIds);
+
+    const id = randomUUID();
+    const salePercent = dto.salePercent ?? PRODUCT_DEFAULTS.SALE_PERCENT;
+
+    const product = await this.prisma.product.create({
+      data: {
+        id,
+        slug: generateSlug(`${dto.name}-${id}`),
+        name: dto.name,
+        image: dto.image,
+        images: dto.images,
+        price: dto.price,
+        salePercent,
+        priceWithSale: calcPriceWithSale(dto.price, salePercent),
+        isAvailable: dto.isAvailable,
+        availableCount: dto.availableCount,
+        description: dto.description,
+        categories: {
+          create: dto.categoryIds.map((categoryId) => ({ categoryId })),
+        },
+      },
+      include: productInclude,
+    });
+
+    return formatProduct(product);
+  }
+
+  async update(id: string, dto: UpdateProductDto): Promise<ProductResponse> {
     if (dto.categoryIds?.length) {
       await this.assertCategoriesExist(dto.categoryIds);
     }
 
-    const priceWithSale = this.calcPriceWithSale(dto.price, dto.salePercent);
+    const priceWithSale = await this.resolvePriceWithSale(id, dto);
 
     try {
-      const id = uuidv4();
-      const product = await this.prisma.product.create({
+      const product = await this.prisma.product.update({
+        where: { id },
         data: {
-          id,
-          slug: generateSlug(`${dto.name}-${id}`),
           name: dto.name,
           image: dto.image,
           images: dto.images,
@@ -101,87 +156,74 @@ export class ProductService {
           isAvailable: dto.isAvailable,
           availableCount: dto.availableCount,
           description: dto.description,
-          categories: {
-            create: dto.categoryIds.map((categoryId) => ({ categoryId })),
-          },
-        },
-        include: {
-          categories: {
-            include: { category: true },
-          },
-        },
-      });
-
-      return this.formatProduct(product);
-    } catch {
-      throw new InternalServerErrorException('Ошибка при создании продукта');
-    }
-  }
-
-  async update(id: string, dto: ProductDto) {
-    await this.getProductById(id);
-
-    if (dto.categoryIds?.length) {
-      await this.assertCategoriesExist(dto.categoryIds);
-    }
-
-    const priceWithSale = this.calcPriceWithSale(dto.price, dto.salePercent);
-
-    try {
-      const product = await this.prisma.product.update({
-        where: { id },
-        data: {
-          ...dto,
-          priceWithSale,
-          categories: {
-            deleteMany: {},
-            ...(dto.categoryIds?.length && {
+          ...(dto.categoryIds?.length && {
+            categories: {
+              deleteMany: {},
               create: dto.categoryIds.map((categoryId) => ({ categoryId })),
-            }),
-          },
+            },
+          }),
         },
-        include: {
-          categories: {
-            include: { category: true },
-          },
-        },
+        include: productInclude,
       });
-
-      return this.formatProduct(product);
-    } catch {
-      throw new InternalServerErrorException('Ошибка при обновлении продукта');
+      return formatProduct(product);
+    } catch (error) {
+      if (isPrismaRecordNotFound(error)) {
+        throw new NotFoundException('Продукт не найден');
+      }
+      throw error;
     }
   }
 
-  async delete(id: string) {
-    await this.getProductById(id);
-    await this.prisma.product.delete({ where: { id } });
-    return { message: 'Продукт удалён' };
+  async delete(id: string): Promise<{ id: string }> {
+    try {
+      return await this.prisma.product.delete({
+        where: { id },
+        select: { id: true },
+      });
+    } catch (error) {
+      if (isPrismaRecordNotFound(error)) {
+        throw new NotFoundException('Продукт не найден');
+      }
+      throw error;
+    }
   }
 
-  private formatProduct(product: any) {
-    return {
-      ...product,
-      categories: product.categories.map((cp: any) => cp.category),
-    };
+  private async resolvePriceWithSale(
+    id: string,
+    dto: UpdateProductDto,
+  ): Promise<number | undefined> {
+    const shouldRecalc =
+      dto.price !== undefined || dto.salePercent !== undefined;
+    if (!shouldRecalc) {
+      return undefined;
+    }
+
+    const current = await this.prisma.product.findUnique({
+      where: { id },
+      select: { price: true, salePercent: true },
+    });
+    if (!current) {
+      return undefined;
+    }
+
+    return calcPriceWithSale(
+      dto.price ?? current.price,
+      dto.salePercent ?? current.salePercent,
+    );
   }
 
-  private async assertCategoriesExist(ids: string[]) {
+  private async assertCategoriesExist(ids: string[]): Promise<void> {
     const found = await this.prisma.category.findMany({
       where: { id: { in: ids } },
       select: { id: true },
     });
-
-    if (found.length !== ids.length) {
-      const missing = ids.filter((id) => !found.some((c) => c.id === id));
-      throw new BadRequestException(
-        `Категории не найдены: ${missing.join(', ')}`,
-      );
+    if (found.length === ids.length) {
+      return;
     }
-  }
-
-  private calcPriceWithSale(price: number, salePercent: number) {
-    const safePercent = Math.max(0, Math.min(100, salePercent));
-    return Math.max(0, Math.ceil(price - price * (safePercent / 100)));
+    const foundSet = new Set(found.map((c) => c.id));
+    const missing = ids.filter((id) => !foundSet.has(id));
+    throw new BadRequestException(
+      `Категории не найдены: ${missing.join(', ')}`,
+    );
   }
 }

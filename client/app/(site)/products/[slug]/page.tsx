@@ -3,14 +3,15 @@ import { ProductDetailPage } from "@/src/pages/product/ui";
 
 export async function generateStaticParams() {
   const products = await serverProductQuery.getAll();
-  return products.map((product) => ({
+  return products.products.map((product) => ({
     slug: product.slug,
   }));
 }
 
 const ProductDetail = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
-  return <ProductDetailPage slug={slug} />;
+  const product = await serverProductQuery.getBySlug(slug);
+  return <ProductDetailPage product={product} />;
 };
 
 export default ProductDetail;

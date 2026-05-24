@@ -1,0 +1,86 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background-color: var(--light-gray);
+  border-radius: 12px;
+}
+
+.title {
+  margin: 0;
+}
+
+.hint {
+  margin: 0;
+  color: var(--dark-gray);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background-color: var(--white);
+  border-radius: 8px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.discount {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.badge {
+  flex-shrink: 0;
+}
+
+.source {
+  margin: 0;
+  color: var(--dark-gray);
+  font-size: 13px;
+}
+
+.code {
+  margin: 0;
+  font-family: ui-monospace, monospace;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  word-break: break-all;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.empty {
+  margin: 0;
+  color: var(--dark-gray);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.state {
+  margin: 0;
+  color: var(--dark-gray);
+  font-size: 15px;
+}

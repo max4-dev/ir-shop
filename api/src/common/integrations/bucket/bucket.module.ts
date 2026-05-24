@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CqrsModule } from '@nestjs/cqrs';
-import { UploadHandler } from './command/upload/upload.handler';
+import { BucketService } from './bucket.service';
 
 @Module({
-  imports: [CqrsModule],
-  providers: [UploadHandler],
+  providers: [BucketService],
+  exports: [BucketService],
 })
 export class BucketModule {}

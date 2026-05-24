@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/common/database';
+import { EmailTokenModule } from 'src/common/redis/email-token.module';
 import { TokenModule } from 'src/common/redis/token.module';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
 @Module({
-  imports: [DatabaseModule, TokenModule],
+  imports: [TokenModule, EmailTokenModule],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],

@@ -12,14 +12,18 @@ import { ProductCardProps } from "./ProductCard.props";
 export const ProductCard = ({
   className,
   product,
+  leftButtonSlot,
   rightButtonSlot,
   ...props
 }: ProductCardProps) => {
   return (
     <article className={cn(className, styles.card)} {...props}>
-      <div className={styles.slots}>
-        <div className={styles.rightSlot}>{rightButtonSlot}</div>
-      </div>
+      {(leftButtonSlot || rightButtonSlot) && (
+        <div className={styles.slots}>
+          <div className={styles.leftSlot}>{leftButtonSlot}</div>
+          <div className={styles.rightSlot}>{rightButtonSlot}</div>
+        </div>
+      )}
       <Image
         className={styles.image}
         src={product.image}

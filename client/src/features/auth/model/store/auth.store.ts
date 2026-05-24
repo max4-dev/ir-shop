@@ -46,8 +46,7 @@ export const useAuthStore = create<AuthStore>()(
         set({ isAuthenticated: true }, false, "auth/login");
       },
       register: async (data: RegisterDTO) => {
-        await authService.register(data);
-        set({ isAuthenticated: true }, false, "auth/register");
+        return authService.register(data);
       },
       logout: async () => {
         await authService.logout();

@@ -1,0 +1,8 @@
+.card {
+  margin-top: 24px;
+}
+
+.secondary {
+  color: var(--gray);
+  font-size: 12px;
+}

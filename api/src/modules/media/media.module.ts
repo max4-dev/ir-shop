@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { CqrsModule } from '@nestjs/cqrs';
-import { UploadHandler } from 'src/common/integrations/bucket/command/upload/upload.handler';
+import { BucketModule } from 'src/common/integrations/bucket/bucket.module';
 import { GenerateService } from './generate.service';
 import { MediaController } from './media.controller';
+import { MediaService } from './media.service';
 
 @Module({
-  imports: [CqrsModule],
+  imports: [BucketModule],
   controllers: [MediaController],
-  providers: [GenerateService, UploadHandler],
+  providers: [GenerateService, MediaService],
+  exports: [MediaService],
 })
 export class MediaModule {}

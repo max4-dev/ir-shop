@@ -1,0 +1,13 @@
+.page {
+  padding: 48px 0;
+}
+
+.inner {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.state {
+  color: var(--dark-gray);
+  font-size: 16px;
+}

@@ -1,0 +1,16 @@
+.filter {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--dark-gray);
+}
+
+.slider {
+  width: 100%;
+}

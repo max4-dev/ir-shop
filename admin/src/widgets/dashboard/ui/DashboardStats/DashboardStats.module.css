@@ -1,0 +1,29 @@
+.link {
+  display: block;
+  color: inherit;
+}
+
+.card {
+  height: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--primary);
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.placeholderTitle {
+  color: var(--gray);
+  font-size: 14px;
+}
+
+.placeholderText {
+  font-size: 24px;
+  font-weight: 600;
+}

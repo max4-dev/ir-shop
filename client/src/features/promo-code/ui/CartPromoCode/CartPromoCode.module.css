@@ -1,0 +1,70 @@
+.promo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+}
+
+.applyButton {
+  flex-shrink: 0;
+  padding: 15px 20px;
+  white-space: nowrap;
+}
+
+.hint {
+  margin: 0;
+  color: var(--dark-gray);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.hintLink {
+  color: var(--black);
+  text-decoration: underline;
+}
+
+.applied {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-radius: 12px;
+  background-color: var(--light-gray);
+}
+
+.appliedText {
+  margin: 0;
+  font-size: 14px;
+}
+
+.appliedDiscount {
+  font-weight: 600;
+  color: var(--red);
+}
+
+.removeButton {
+  padding: 0;
+  color: var(--dark-gray);
+  background: none;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.removeButton:hover {
+  color: var(--black);
+}

@@ -1,0 +1,39 @@
+.layout {
+  min-height: 100%;
+}
+
+.sider {
+  overflow: auto;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  inset-inline-start: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  color: var(--white);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border-gray);
+}
+
+.title {
+  margin: 0 !important;
+}
+
+.content {
+  margin: 24px;
+  padding: 24px;
+  background: var(--white);
+  border-radius: 8px;
+}

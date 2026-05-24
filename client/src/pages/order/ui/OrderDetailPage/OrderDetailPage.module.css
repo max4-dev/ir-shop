@@ -1,0 +1,157 @@
+.page {
+  padding-bottom: 48px;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.title {
+  margin-bottom: 8px;
+}
+
+.date {
+  color: var(--dark-gray);
+  font-size: 16px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  align-items: start;
+  gap: 32px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sectionTitle {
+  margin-bottom: 4px;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-gray);
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.image {
+  flex-shrink: 0;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.itemInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemName {
+  display: inline-block;
+  margin-bottom: 4px;
+  color: var(--black);
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.itemName:hover {
+  color: var(--primary);
+}
+
+.itemMeta {
+  color: var(--dark-gray);
+  font-size: 14px;
+}
+
+.itemPrice {
+  flex-shrink: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detailRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detailLabel {
+  color: var(--dark-gray);
+  font-size: 14px;
+}
+
+.detailValue {
+  font-size: 16px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-gray);
+}
+
+.totalLabel {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.totalValue {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.action {
+  width: 100%;
+  padding: 13px 24px;
+  text-align: center;
+}
+
+.state {
+  color: var(--dark-gray);
+  font-size: 18px;
+}
+
+@media (width <= 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

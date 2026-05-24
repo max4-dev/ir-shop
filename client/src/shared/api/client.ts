@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
-import ky, { Options } from "ky";
+import ky, { isHTTPError, Options } from "ky";
 
 import { CONFIG } from "../config";
 import { SessionEvent, sessionEventBus } from "../lib";
@@ -32,7 +32,7 @@ const onRefreshFailed = (error: Error) => {
 };
 
 const baseConfig: Options = {
-  prefixUrl: CONFIG.API_URL,
+  prefix: CONFIG.API_URL,
   credentials: "include",
   headers: { "Content-Type": "application/json" },
 };
@@ -43,7 +43,7 @@ export const client = ky.create({
   ...baseConfig,
   hooks: {
     afterResponse: [
-      async (request, _options, response) => {
+      async ({ request, response }) => {
         if (response.status !== HttpCodes.UNAUTHORIZED) {
           return response;
         }
@@ -82,18 +82,24 @@ export const client = ky.create({
     ],
 
     beforeError: [
-      async (error) => {
-        const { response } = error;
-        let message = response.statusText;
-
-        try {
-          const body = (await response.clone().json()) as { message?: string };
-          if (body.message) message = body.message;
-        } catch (err) {
-          Sentry.captureException(err, { extra: { status: response.status, url: response.url } });
+      async ({ error }) => {
+        if (!isHTTPError(error)) {
+          return error;
         }
 
-        return Object.assign(error, { message });
+        let message = error.response.statusText;
+
+        try {
+          const body = error.data as { message?: string } | undefined;
+          if (body?.message) message = body.message;
+        } catch (err) {
+          Sentry.captureException(err, {
+            extra: { status: error.response.status, url: error.response.url },
+          });
+        }
+
+        error.message = message;
+        return error;
       },
     ],
   },

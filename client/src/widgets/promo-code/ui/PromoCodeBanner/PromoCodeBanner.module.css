@@ -1,0 +1,110 @@
+.banner[data-state="open"] {
+  animation: slideDown 0.25s ease-out;
+}
+
+.banner[data-state="closed"] {
+  animation: slideUp 0.2s ease-in;
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+
+  to {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  background-color: var(--light-gray);
+  border-bottom: 1px solid rgb(255 51 51 / 0.15);
+  margin-bottom: 20px;
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 200px;
+}
+
+.title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.description {
+  margin: 0;
+  color: var(--dark-gray);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.code {
+  font-size: 13px;
+  font-family: var(--font-manrope), monospace;
+  word-break: break-all;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.copyButton {
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+.cartLink {
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+.closeButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  color: var(--dark-gray);
+  background: none;
+  font-size: 22px;
+  line-height: 1;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: var(--black);
+  background-color: rgb(255 255 255 / 0.6);
+}

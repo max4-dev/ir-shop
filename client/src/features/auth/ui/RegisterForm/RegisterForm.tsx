@@ -5,6 +5,7 @@ import cn from "classnames";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
+import { ROUTES } from "@/src/shared/config";
 import { getErrorMessage } from "@/src/shared/lib";
 import { useToast } from "@/src/shared/lib/hooks";
 import { Button, Input, Toast } from "@/src/shared/ui";
@@ -30,7 +31,7 @@ export const RegisterForm = ({ className }: RegisterFormProps) => {
   const onSubmitHandler: SubmitHandler<RegisterDTO> = async (data) => {
     try {
       await handleRegister(data);
-      router.push("/");
+      router.push(ROUTES.AUTH.REGISTER_SUCCESS);
     } catch (error) {
       showToast(getErrorMessage(error), {
         appearance: "danger",

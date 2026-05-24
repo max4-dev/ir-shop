@@ -1,0 +1,35 @@
+.page {
+  padding-bottom: 48px;
+}
+
+.title {
+  margin-bottom: 24px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  align-items: start;
+  gap: 32px;
+}
+
+.summary {
+  position: sticky;
+  top: 24px;
+}
+
+.state {
+  color: var(--dark-gray);
+  font-size: 18px;
+}
+
+@media (width <= 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .summary {
+    position: static;
+    order: -1;
+  }
+}

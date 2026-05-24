@@ -1,0 +1,14 @@
+.page {
+  padding: 48px 0;
+}
+
+.inner {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.text {
+  margin: 16px 0 0;
+  color: var(--dark-gray);
+  line-height: 1.5;
+}

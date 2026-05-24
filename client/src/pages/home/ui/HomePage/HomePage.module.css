@@ -1,0 +1,26 @@
+.page {
+  padding-bottom: 64px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.section {
+  padding-top: 8px;
+}
+
+.state {
+  color: var(--dark-gray);
+  font-size: 18px;
+  text-align: center;
+  padding: 24px 0;
+}
+
+@media (width <= 768px) {
+  .container {
+    gap: 40px;
+  }
+}

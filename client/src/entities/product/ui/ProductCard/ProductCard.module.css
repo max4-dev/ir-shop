@@ -48,9 +48,20 @@
 .slots {
   position: absolute;
   top: 8px;
+  left: 8px;
   right: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
   transform: translateY(-200%);
   transition: transform 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.leftSlot,
+.rightSlot {
+  pointer-events: auto;
 }
 
 .slots:focus-within {

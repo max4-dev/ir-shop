@@ -1,0 +1,19 @@
+.button {
+  padding: 8px 12px;
+  color: var(--dark-gray);
+  background: transparent;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+  color: var(--red);
+  background-color: var(--light-gray);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

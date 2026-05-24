@@ -1,0 +1,82 @@
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  margin-bottom: 4px;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.itemName {
+  flex: 1;
+  min-width: 0;
+  color: var(--dark-gray);
+}
+
+.itemQty {
+  flex-shrink: 0;
+  color: var(--dark-gray);
+}
+
+.itemPrice {
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-gray);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.label {
+  color: var(--dark-gray);
+  font-size: 16px;
+}
+
+.value {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.originalTotal {
+  color: var(--gray);
+  text-decoration: line-through;
+}
+
+.promoDiscount {
+  color: var(--red);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.total {
+  font-size: 24px;
+  font-weight: 700;
+}

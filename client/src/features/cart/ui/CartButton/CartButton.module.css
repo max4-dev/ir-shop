@@ -1,4 +1,4 @@
-.button {
+.iconButton {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,8 +10,18 @@
   cursor: pointer;
 }
 
+.iconButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .icon {
   width: 28px;
   height: 26px;
   color: var(--white);
+}
+
+.primaryButton {
+  width: 100%;
+  max-width: 320px;
 }

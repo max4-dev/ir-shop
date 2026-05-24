@@ -1,0 +1,27 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.headerLink {
+  padding: 12px 28px;
+  flex-shrink: 0;
+}
+
+.slider {
+  width: 100%;
+  overflow: hidden;
+}
+
+.slide {
+  height: auto;
+}

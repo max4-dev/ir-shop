@@ -1,0 +1,32 @@
+{
+  "plugins": ["stylelint-order"],
+  "rules": {
+    "color-hex-length": "short",
+    "order/properties-order": [
+      "position",
+      "top",
+      "right",
+      "bottom",
+      "left",
+      "display",
+      "flex-direction",
+      "justify-content",
+      "align-items",
+      "width",
+      "height",
+      "margin",
+      "padding",
+      "color",
+      "background",
+      "font-size",
+      "font-family"
+    ],
+    "selector-class-pattern": "^.*$",
+    "declaration-block-no-redundant-longhand-properties": [
+      true,
+      {
+        "ignoreShorthands": ["/grid/"]
+      }
+    ]
+  }
+}

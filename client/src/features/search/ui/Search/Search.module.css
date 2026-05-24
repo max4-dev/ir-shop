@@ -2,3 +2,79 @@
   max-width: 489px;
   width: 100%;
 }
+
+.suggestions {
+  width: var(--radix-popover-trigger-width);
+  max-height: min(400px, 70vh);
+  overflow-y: auto;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--black);
+  text-decoration: none;
+}
+
+.item:hover {
+  background-color: var(--light-gray);
+}
+
+.image {
+  flex-shrink: 0;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.price {
+  display: block;
+  color: var(--dark-gray);
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.separator {
+  height: 1px;
+  margin: 4px 0;
+  background-color: var(--border-gray);
+}
+
+.viewAll {
+  display: block;
+  padding: 8px 12px;
+  color: var(--black);
+  font-size: 14px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+}
+
+.viewAll:hover {
+  background-color: var(--light-gray);
+}
+
+.state {
+  margin: 0;
+  padding: 12px;
+  color: var(--dark-gray);
+  font-size: 14px;
+  text-align: center;
+}

@@ -1,0 +1,36 @@
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  color: var(--black);
+  font-size: 20px;
+  line-height: 1;
+  border: 1px solid var(--border-gray);
+  border-radius: 50%;
+  background-color: var(--white);
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+  background-color: var(--light-gray);
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.value {
+  min-width: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+}

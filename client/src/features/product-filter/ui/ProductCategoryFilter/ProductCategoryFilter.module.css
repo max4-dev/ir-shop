@@ -1,0 +1,28 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.link {
+  display: block;
+  padding: 8px 12px;
+  color: var(--black);
+  font-size: 14px;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.link:hover {
+  background-color: var(--light-gray);
+}
+
+.linkActive {
+  background-color: var(--light-gray);
+  font-weight: 500;
+}
+
+.all {
+  margin-bottom: 4px;
+}

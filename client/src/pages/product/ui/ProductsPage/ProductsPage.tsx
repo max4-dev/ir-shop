@@ -1,18 +1,29 @@
 "use client";
 
-import cn from "classnames";
 import Link from "next/link";
 
-import { useProducts } from "@/src/entities/product/model";
-import { Breadcrumb, Container } from "@/src/shared/ui";
-import { ProductList } from "@/src/widgets/product/ui";
+import {
+  flattenProductPages,
+  getProductPagesMeta,
+  useProductsInfinite,
+} from "@/src/entities/product/model";
+import { useProductFilters } from "@/src/features/product-filter/model";
+import { getErrorMessage } from "@/src/shared/lib";
+import { Breadcrumb, Container, Title } from "@/src/shared/ui";
+import { ProductFilters, ProductListSection } from "@/src/widgets/product/ui";
 
 import styles from "./ProductsPage.module.css";
 
 export const ProductsPage = () => {
-  const { data: products } = useProducts();
+  const { queryParams, page, limit, setPage } = useProductFilters();
+  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useProductsInfinite(queryParams, page);
+
+  const products = flattenProductPages(data?.pages);
+  const { total } = getProductPagesMeta(data?.pages);
+
   return (
-    <div className={cn(styles.products)}>
+    <div className={styles.page}>
       <Container>
         <Breadcrumb>
           <Breadcrumb.List>
@@ -28,7 +39,31 @@ export const ProductsPage = () => {
           </Breadcrumb.List>
         </Breadcrumb>
 
-        {products && <ProductList products={products} />}
+        <Title className={styles.title} tag="h1" size="xl">
+          Все продукты
+        </Title>
+
+        {isLoading && !data && <p className={styles.state}>Загрузка...</p>}
+
+        {isError && <p className={styles.state}>{getErrorMessage(error)}</p>}
+
+        {data && (
+          <div className={styles.layout}>
+            <aside className={styles.filters}>
+              <ProductFilters />
+            </aside>
+            <ProductListSection
+              products={products}
+              total={total}
+              limit={limit}
+              offset={queryParams.offset ?? 0}
+              hasMore={hasNextPage}
+              onLoadMore={() => fetchNextPage()}
+              onPageChange={setPage}
+              isLoadingMore={isFetchingNextPage}
+            />
+          </div>
+        )}
       </Container>
     </div>
   );

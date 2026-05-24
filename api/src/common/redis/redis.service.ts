@@ -1,39 +1,48 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
+import { ConfigSchema } from '../config/app-config';
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
-  private client: Redis;
+  private readonly logger = new Logger(RedisService.name);
+  private readonly client: Redis;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService<ConfigSchema, true>,
+  ) {
+    const isProd =
+      this.configService.get('NODE_ENV', { infer: true }) === 'production';
+
     this.client = new Redis({
-      host: this.configService.get<string>('REDIS_HOST', 'localhost'),
-      port: this.configService.get<number>('REDIS_PORT', 6379),
-      password: this.configService.getOrThrow<string>('REDIS_PASSWORD'),
-      tls: process.env.NODE_ENV === 'production' ? {} : undefined,
-      retryStrategy: (times) => {
-        if (times > 3) {
-          return null;
-        }
-        return Math.min(times * 50, 2000);
-      },
+      host: this.configService.get('REDIS_HOST', { infer: true }),
+      port: this.configService.get('REDIS_PORT', { infer: true }),
+      password: this.configService.get('REDIS_PASSWORD', { infer: true }),
+      tls: isProd ? {} : undefined,
+      retryStrategy: (times) => Math.min(times * 200, 5_000),
+      maxRetriesPerRequest: 3,
+      enableReadyCheck: true,
     });
 
     this.client.on('error', (error) => {
-      console.error('Redis error:', error);
+      this.logger.error(`Redis error: ${error.message}`, error.stack);
     });
 
     this.client.on('connect', () => {
-      console.log('Connected to Redis');
+      this.logger.log('Connected to Redis');
     });
   }
 
-  async onModuleInit() {
+  async onModuleInit(): Promise<void> {
     await this.client.ping();
   }
 
-  async onModuleDestroy() {
+  async onModuleDestroy(): Promise<void> {
     await this.client.quit();
   }
 

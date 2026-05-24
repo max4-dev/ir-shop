@@ -1,0 +1,67 @@
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  margin-bottom: 4px;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.label {
+  color: var(--dark-gray);
+  font-size: 16px;
+}
+
+.value {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.originalTotal {
+  color: var(--gray);
+  font-size: 16px;
+  text-decoration: line-through;
+}
+
+.promoDiscount {
+  color: var(--red);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.total {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.checkout {
+  width: 100%;
+  padding: 15px 24px;
+}
+
+.continue {
+  width: 100%;
+  padding: 13px 24px;
+  text-align: center;
+}

@@ -1,0 +1,46 @@
+.hero {
+  padding: 48px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--white) 55%, var(--light-gray) 100%);
+  border: 1px solid var(--border-gray);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 640px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dark-gray);
+}
+
+.title {
+  margin: 0;
+}
+
+.description {
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--dark-gray);
+}
+
+.cta {
+  align-self: flex-start;
+  margin-top: 8px;
+}
+
+@media (width <= 768px) {
+  .hero {
+    padding: 32px 24px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+}

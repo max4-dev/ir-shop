@@ -1,0 +1,25 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--black);
+  background-color: var(--white);
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+}
+
+.trigger[data-state="open"] {
+  border-color: var(--black);
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--dark-gray);
+  transform: rotate(90deg);
+}
