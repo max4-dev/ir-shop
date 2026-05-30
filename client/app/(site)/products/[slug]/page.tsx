@@ -2,8 +2,8 @@ import { serverProductQuery } from "@/src/entities/product/api";
 import { ProductDetailPage } from "@/src/pages/product/ui";
 
 export async function generateStaticParams() {
-  const products = await serverProductQuery.getAll();
-  return products.products.map((product) => ({
+  const data = await serverProductQuery.getAll();
+  return data.products.map((product) => ({
     slug: product.slug,
   }));
 }

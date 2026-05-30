@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 node_modules
 .pnp
@@ -55,6 +53,9 @@ logs
 .env*
 .env.sentry-build-plugin
 !.env.example
+
+# deployment backups
+backups/
 
 # vercel
 .vercel

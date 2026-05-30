@@ -19,6 +19,8 @@ async function bootstrap() {
   const clientUrl = configService.get('CLIENT_URL', { infer: true });
   const adminUrl = configService.get('ADMIN_URL', { infer: true });
 
+  app.getHttpAdapter().getInstance().set('trust proxy', 1);
+
   app.use(helmet({ contentSecurityPolicy: isProd }));
   app.use(cookieParser());
 

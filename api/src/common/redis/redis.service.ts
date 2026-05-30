@@ -16,14 +16,13 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   constructor(
     private readonly configService: ConfigService<ConfigSchema, true>,
   ) {
-    const isProd =
-      this.configService.get('NODE_ENV', { infer: true }) === 'production';
+    const useTls = this.configService.get('REDIS_TLS', { infer: true });
 
     this.client = new Redis({
       host: this.configService.get('REDIS_HOST', { infer: true }),
       port: this.configService.get('REDIS_PORT', { infer: true }),
       password: this.configService.get('REDIS_PASSWORD', { infer: true }),
-      tls: isProd ? {} : undefined,
+      tls: useTls ? {} : undefined,
       retryStrategy: (times) => Math.min(times * 200, 5_000),
       maxRetriesPerRequest: 3,
       enableReadyCheck: true,

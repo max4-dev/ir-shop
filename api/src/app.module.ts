@@ -8,6 +8,8 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { DatabaseModule } from './common/database';
+import { HealthController } from './common/health/health.controller';
+import { HealthService } from './common/health/health.service';
 import { MailModule } from './common/integrations/mail/mail.module';
 import { RedisModule } from './common/redis/redis.module';
 import { validateConfig } from './common/utils';
@@ -52,7 +54,9 @@ import { UserModule } from './modules/user/user.module';
     PromoCodeModule,
     PaymentModule,
   ],
+  controllers: [HealthController],
   providers: [
+    HealthService,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
@@ -64,6 +68,8 @@ export class AppModule implements NestModule {
     consumer
       .apply(SessionMiddleware)
       .exclude(
+        { path: 'health', method: RequestMethod.GET },
+        { path: 'api/health', method: RequestMethod.GET },
         { path: 'payments/webhook', method: RequestMethod.POST },
         { path: 'api/payments/webhook', method: RequestMethod.POST },
         { path: 'docs', method: RequestMethod.ALL },
