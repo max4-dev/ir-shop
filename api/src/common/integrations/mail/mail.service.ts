@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { OrderStatus } from '@prisma/client';
 import type { Transporter } from 'nodemailer';
+import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 import * as nodemailer from 'nodemailer';
 import {
   ConfigSchema,
@@ -40,12 +41,20 @@ export class MailService {
       const user = this.config.get('SMTP_USER', { infer: true });
       const pass = this.config.get('SMTP_PASSWORD', { infer: true });
 
-      this.transporter = nodemailer.createTransport({
+      const transportOptions: SMTPTransport.Options = {
         host,
         port: this.config.get('SMTP_PORT', { infer: true }),
         secure: this.config.get('SMTP_SECURE', { infer: true }),
+        connectionTimeout: 10_000,
+        greetingTimeout: 10_000,
+        socketTimeout: 10_000,
         ...(user && pass ? { auth: { user, pass } } : {}),
-      });
+      };
+
+      this.transporter = nodemailer.createTransport({
+        ...transportOptions,
+        family: 4,
+      } as SMTPTransport.Options);
     }
     return this.transporter;
   }
