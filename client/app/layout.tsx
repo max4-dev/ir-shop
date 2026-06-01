@@ -1,5 +1,6 @@
 import { Manrope, Montserrat } from "next/font/google";
 
+import { YandexMetrika } from "@/src/app/analytics";
 import { AppProvider } from "@/src/app/providers";
 
 import type { Metadata } from "next";
@@ -34,6 +35,7 @@ export default function RootLayout({
     <html lang="ru">
       <body className={`${manrope.variable} ${montserrat.variable}`}>
         <AppProvider>{children}</AppProvider>
+        <YandexMetrika />
       </body>
     </html>
   );

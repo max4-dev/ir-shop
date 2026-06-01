@@ -46,6 +46,7 @@ Compose: `./scripts/docker-compose.sh`
 | `FRONTEND_PORT` | no | Default: `3000` |
 | `NEXT_PUBLIC_API_URL` | yes | Public API URL (build-time) |
 | `NEXT_PUBLIC_S3_HOST` | yes | Image CDN host |
+| `NEXT_PUBLIC_YANDEX_METRIKA_ID` | no | Yandex Metrika counter ID |
 | `API_URL` | yes | Server-side API URL (build + runtime) |
 | `SENTRY_AUTH_TOKEN` | no | |
 

@@ -8,7 +8,7 @@ export const PRODUCT_LIMITS = {
 } as const;
 
 export const PRODUCT_PAGINATION = {
-  DEFAULT_LIMIT: 3,
+  DEFAULT_LIMIT: 6,
   MAX_LIMIT: 100,
 } as const;
 

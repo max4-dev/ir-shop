@@ -92,6 +92,7 @@ services:
         API_URL: ${API_URL}
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
         NEXT_PUBLIC_S3_HOST: ${NEXT_PUBLIC_S3_HOST}
+        NEXT_PUBLIC_YANDEX_METRIKA_ID: ${NEXT_PUBLIC_YANDEX_METRIKA_ID:-109559027}
         SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN:-}
     container_name: ir-shop-frontend
     restart: unless-stopped
